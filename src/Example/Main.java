@@ -5,8 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 	public void onEnable() {
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new EventListener(this), this);
+		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("example").setExecutor(new CommandListener(this));
 	}
 }
