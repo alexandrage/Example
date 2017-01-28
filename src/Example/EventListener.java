@@ -24,7 +24,7 @@ public class EventListener implements Listener {
     
     @EventHandler
     public void on(PlayerInteractEvent e) {
-		SpawnEgg egg = new SpawnEgg(EntityType.HORSE);
+	SpawnEgg egg = new SpawnEgg(EntityType.HORSE);
         e.getPlayer().setItemInHand(egg.toItemStack());
     }
 }
