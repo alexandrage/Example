@@ -1,7 +1,5 @@
 package Example;
 
-import java.io.IOException;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +21,8 @@ public class EventListener implements Listener {
     }
     
     @EventHandler
-    public void on(PlayerInteractEvent e) throws IOException {
-		SpawnEgg egg = new SpawnEgg(EntityType.HORSE);
-        e.getPlayer().setItemInHand(egg.toItemStack());
+    public void on(PlayerInteractEvent e) {
+	SpawnEgg egg = new SpawnEgg(EntityType.HORSE);
+        e.getPlayer().getInventory().setItemInMainHand(egg.toItemStack());
     }
 }
