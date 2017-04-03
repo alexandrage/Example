@@ -3,12 +3,12 @@ package Example;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
-	
+	public Configs cfgs;
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("example").setExecutor(new CommandListener(this));
 		new Scheduler(this).runTaskTimer(this, 0, 20);
-		Configs cfgs = new Configs();
+		cfgs = new Configs();
 		cfgs.addConfig(this, "name1");
 		cfgs.addConfig(this, "name2");
 		CustomConfig cfg1 = cfgs.getConfig("name1");
