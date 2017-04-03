@@ -1,15 +1,13 @@
 package Example;
 
-import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EventListener implements Listener {
-	Main plugin;
+	private Main plugin;
 	public EventListener(Main instance) {
 		this.plugin = instance;
 	}
@@ -22,12 +20,10 @@ public class EventListener implements Listener {
 		}
 	}
 	
-	  @EventHandler
-	  public void on(InventoryClickEvent e) {
-		  e.setCancelled(true);
-		  Player p = (Player)e.getWhoClicked();
-		  p.updateInventory();
-          p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
-	  }
+	@EventHandler
+	public void on(PlayerInteractEvent e) {
+		e.getPlayer().sendMessage(this.plugin.cfgs.getConfig("name1").getCfg().get("name1")+"");
+		e.getPlayer().sendMessage(this.plugin.cfgs.getConfig("name2").getCfg().get("name2")+"");
+	}
 	  
 }
