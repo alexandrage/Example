@@ -1,6 +1,5 @@
 package Example;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -9,10 +8,14 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("example").setExecutor(new CommandListener(this));
 		new Scheduler(this).runTaskTimer(this, 0, 20);
-		CustomConfig custom = new CustomConfig(this, "name");
-		FileConfiguration cfg = custom.getCfg();
-		cfg.set("test", "name");
-		custom.saveCfg();
-		custom.reloadCfg();
+		Configs cfgs = new Configs();
+		cfgs.addConfig(this, "name1");
+		cfgs.addConfig(this, "name2");
+		CustomConfig cfg1 = cfgs.getConfig("name1");
+		cfg1.getCfg().set("name1", "value1");
+		cfg1.saveCfg();
+		CustomConfig cfg2 = cfgs.getConfig("name2");
+		cfg2.getCfg().set("name2", "value2");
+		cfg2.saveCfg();
 	}
 }
