@@ -9,7 +9,7 @@ public class CommandListener implements CommandExecutor {
 	protected CommandListener(Main instance) {
 		this.plugin =  instance;
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		return true;
