@@ -1,5 +1,6 @@
 package Example;
 
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -21,5 +22,9 @@ public class Main extends JavaPlugin {
 			cfg2.getCfg().set("name2", "value2");
 			cfg2.saveCfg();
 		}
+	}
+	
+	static {
+		ConfigurationSerialization.registerClass(Loc.class, "Loc");
 	}
 }
