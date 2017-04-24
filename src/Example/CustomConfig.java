@@ -3,13 +3,14 @@ package Example;
 import java.io.File;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class CustomConfig {
 	
 	private YamlConfiguration yml;
 	private File file;
 	
-	CustomConfig(Main plugin, String name) {
+	CustomConfig(JavaPlugin plugin, String name) {
 		this.file = new File(plugin.getDataFolder(), name+".yml");
 		yml = YamlConfiguration.loadConfiguration(file);
 		this.file.getParentFile().mkdirs();

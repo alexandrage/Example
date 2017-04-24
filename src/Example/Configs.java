@@ -3,10 +3,12 @@ package Example;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 public class Configs {
 	private Map<String, CustomConfig> sfg = new HashMap<String, CustomConfig>();
 
-	public CustomConfig getConfig(String name) {
+	public CustomConfig get(String name) {
 		return sfg.get(name);
 	}
 
@@ -14,7 +16,7 @@ public class Configs {
 		return sfg;
 	}
 
-	public void addConfig(Main pligin, String name) {
+	public void add(JavaPlugin pligin, String name) {
 		CustomConfig custom = new CustomConfig(pligin, name);
 		sfg.put(name, custom);
 	}
