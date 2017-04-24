@@ -22,8 +22,8 @@ public class EventListener implements Listener {
 	
 	@EventHandler
 	public void on(PlayerInteractEvent e) {
-		e.getPlayer().sendMessage(this.plugin.cfgs.getConfig("name1").getCfg().get("name1")+"");
-		e.getPlayer().sendMessage(this.plugin.cfgs.getConfig("name2").getCfg().get("name2")+"");
+		e.getPlayer().sendMessage(this.plugin.cfgs.get("name1").getCfg().get("name1")+"");
+		e.getPlayer().sendMessage(this.plugin.cfgs.get("name2").getCfg().get("name2")+"");
 	}
 	  
 }
