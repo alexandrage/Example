@@ -25,6 +25,6 @@ public class Main extends JavaPlugin {
 	}
 	
 	static {
-		ConfigurationSerialization.registerClass(Loc.class, "Loc");
+		ConfigurationSerialization.registerClass(MapSer.class, "MapSer");
 	}
 }
