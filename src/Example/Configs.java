@@ -16,8 +16,8 @@ public class Configs {
 		return sfg;
 	}
 
-	public void add(JavaPlugin pligin, String name) {
-		CustomConfig custom = new CustomConfig(pligin, name);
+	public void add(JavaPlugin plugin, String name) {
+		CustomConfig custom = new CustomConfig(plugin, name);
 		sfg.put(name, custom);
 	}
 }
