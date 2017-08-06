@@ -1,6 +1,8 @@
 package Example;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Example {
 	public static Location setDirection(Location loc, Location lookat) {
@@ -23,5 +25,46 @@ public class Example {
 		loc.setYaw(-loc.getYaw() * 180f / (float) Math.PI);
 		loc.setPitch(loc.getPitch() * 180f / (float) Math.PI);
 		return loc;
+	}
+
+	public static boolean checkremove(Player p, ItemStack s, int c) {
+		if (calc(p, s) >= c) {
+			clear(p, s, c);
+			return true;
+		}
+		return false;
+	}
+
+	public static int calc(Player p, ItemStack s) {
+		int count = 0;
+		for (int i = 0; i < p.getInventory().getSize(); i++) {
+			ItemStack stack = p.getInventory().getItem(i);
+			if (stack == null)
+				continue;
+			if (stack.isSimilar(s)) {
+				count += stack.getAmount();
+			}
+		}
+		return count;
+	}
+
+	public static void clear(Player p, ItemStack s, int c) {
+		for (int i = 0; i < p.getInventory().getSize(); i++) {
+			ItemStack stack = p.getInventory().getItem(i);
+			if (stack == null)
+				continue;
+			if (stack.isSimilar(s)) {
+				if (stack.getAmount() == 0)
+					break;
+				if (stack.getAmount() <= c) {
+					c = c - stack.getAmount();
+					stack.setAmount(-1);
+				}
+				if (stack.getAmount() > c) {
+					stack.setAmount(stack.getAmount() - c);
+					c = 0;
+				}
+			}
+		}
 	}
 }
