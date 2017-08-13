@@ -7,15 +7,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class SQLite {
+public class H2 {
 	static Connection conn;
 	static Statement statmt;
 	static PreparedStatement preparedStatement = null;
 
-	SQLite(String url) {
+	H2(String url) {
 		try {
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite://" + url);
+			Class.forName("org.h2.Driver");
+			conn = DriverManager.getConnection("jdbc:h2://" + url + ";mode=MySQL", "sa", "");
 			statmt = conn.createStatement();
 			statmt.execute(
 					"CREATE TABLE IF NOT EXISTS `users` (`user` varchar(255) PRIMARY KEY,`time` varchar(255) NOT NULL)");
@@ -26,9 +26,11 @@ public class SQLite {
 
 	public void insert(String user, Long time) {
 		try {
-			PreparedStatement e = conn.prepareStatement("INSERT INTO users (user,time) VALUES (?,?);");
+			PreparedStatement e = conn
+					.prepareStatement("INSERT INTO users (user,time) VALUES (?,?) ON DUPLICATE KEY UPDATE time = ?;");
 			e.setString(1, user);
 			e.setLong(2, time);
+			e.setLong(3, time);
 			e.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,7 +1,8 @@
 package Example;
+
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Scheduler  extends BukkitRunnable {
+public class Scheduler extends BukkitRunnable {
 	Main plugin;
 
 	Scheduler(Main plugin) {
@@ -10,6 +11,6 @@ public class Scheduler  extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		//TODO
+		// TODO
 	}
 }

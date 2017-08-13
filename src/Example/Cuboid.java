@@ -1,4 +1,5 @@
 package Example;
+
 public class Cuboid {
 	private long xMin;
 	private long xMax;
@@ -31,31 +32,28 @@ public class Cuboid {
 		}
 	}
 
-    public boolean intersects(Cuboid cuboid) {
-    	return cuboid.xMin <= xMax && cuboid.xMax >= xMin
-    			&& cuboid.yMin <= yMax && cuboid.yMax >= yMin
-    			&& cuboid.zMin <= zMax && cuboid.zMax >= zMin;
-    }
-   
-    public boolean contains(long x, long y, long z) {
-    	return x >= xMin && x <= xMax
-    			&& y >= yMin && y <= yMax
-    			&& z >= zMin && z <= zMax;
-    }
+	public boolean intersects(Cuboid cuboid) {
+		return cuboid.xMin <= xMax && cuboid.xMax >= xMin && cuboid.yMin <= yMax && cuboid.yMax >= yMin
+				&& cuboid.zMin <= zMax && cuboid.zMax >= zMin;
+	}
 
-    public long getVolume() {
-    	return getWidth() * getHeight() * getDepth();
-    }
+	public boolean contains(long x, long y, long z) {
+		return x >= xMin && x <= xMax && y >= yMin && y <= yMax && z >= zMin && z <= zMax;
+	}
 
-    public long getWidth() {
-    	return xMax - xMin + 1;
-    }
+	public long getVolume() {
+		return getWidth() * getHeight() * getDepth();
+	}
 
-    public long getHeight() {
-    	return yMax - yMin + 1;
-    }
+	public long getWidth() {
+		return xMax - xMin + 1;
+	}
 
-    public long getDepth() {
-    	return zMax - zMin + 1;
-    }
+	public long getHeight() {
+		return yMax - yMin + 1;
+	}
+
+	public long getDepth() {
+		return zMax - zMin + 1;
+	}
 }

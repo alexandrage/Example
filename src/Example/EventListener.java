@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EventListener implements Listener {
 	private Main plugin;
+
 	public EventListener(Main instance) {
 		this.plugin = instance;
 	}
@@ -19,11 +20,11 @@ public class EventListener implements Listener {
 			e.getBlock().getState().update();
 		}
 	}
-	
+
 	@EventHandler
 	public void on(PlayerInteractEvent e) {
-		e.getPlayer().sendMessage(this.plugin.cfgs.get("name1").getCfg().get("name1")+"");
-		e.getPlayer().sendMessage(this.plugin.cfgs.get("name2").getCfg().get("name2")+"");
+		e.getPlayer().sendMessage(this.plugin.cfgs.get("name1").getCfg().get("name1") + "");
+		e.getPlayer().sendMessage(this.plugin.cfgs.get("name2").getCfg().get("name2") + "");
 	}
-	  
+
 }
