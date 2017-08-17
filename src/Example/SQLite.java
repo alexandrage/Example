@@ -26,7 +26,7 @@ public class SQLite {
 
 	public void insert(String user, Long time) {
 		try {
-			PreparedStatement e = conn.prepareStatement("INSERT INTO users (user,time) VALUES (?,?);");
+			PreparedStatement e = conn.prepareStatement("INSERT OR REPLACE INTO users (user,time) VALUES (?,?);");
 			e.setString(1, user);
 			e.setLong(2, time);
 			e.executeUpdate();
