@@ -28,9 +28,6 @@ public class Main extends JavaPlugin {
 		cfgs.add(this, "stack");
 		CustomConfig cfg = cfgs.get("stack");
 		stl = new StackList(cfg.getCfg());
-		for (String st : stl.getMap().keySet()) {
-			System.out.println(stl.getMap().get(st));
-		}
 	}
 
 	static {

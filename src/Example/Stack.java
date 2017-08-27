@@ -25,6 +25,7 @@ public class Stack {
 	private Map<String, Integer> enchant;
 	private List<String> flags;
 	private boolean unbreak;
+	private String command;
 
 	@SuppressWarnings("unchecked")
 	Stack(ConfigurationSection config) {
@@ -41,6 +42,7 @@ public class Stack {
 		}
 		this.flags = (List<String>) config.get("flags");
 		this.unbreak = config.getBoolean("unbreak");
+		this.command = config.getString("command");
 	}
 
 	ItemStack getStack() {
@@ -68,6 +70,10 @@ public class Stack {
 		}
 		stack.setItemMeta(meta);
 		return stack;
+	}
+	
+	String getCommand() {
+		return this.command;
 	}
 
 	public String toString() {
