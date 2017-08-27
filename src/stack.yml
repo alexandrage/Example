@@ -1,0 +1,21 @@
+st0:
+  material: "STONE"
+  amount: 20
+  date: 0
+  customname: "Камень"
+  lore:
+  - "Цена 100"
+  enchant:
+  - PROTECTION_FIRE: 2
+  flags:
+  - "HIDE_ATTRIBUTES"
+  unbreak: true
+st1:
+  material: "STONE"
+  amount: 20
+  date: 1
+  lore:
+  - "Цена 100"
+st2:
+  material: "STONE"
+  amount: 5
