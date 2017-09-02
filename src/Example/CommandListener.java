@@ -12,10 +12,10 @@ public class CommandListener implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		if (arg.length == 0)
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0)
 			return false;
-		if (sender.hasPermission("example.reload") && arg[0].equalsIgnoreCase("reload")) {
+		if (sender.hasPermission("example.reload") && args[0].equalsIgnoreCase("reload")) {
 			for (CustomConfig cfg : this.plugin.cfgs.getConfigs().values()) {
 				cfg.reloadCfg();
 			}

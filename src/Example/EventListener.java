@@ -33,10 +33,10 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void on(InventoryClickEvent e) {
-		if (e.getInventory().getHolder() instanceof Menu && e.getClickedInventory()!=null) {
+		if (e.getInventory().getHolder() instanceof Menu && e.getClickedInventory() != null) {
 			e.setCancelled(true);
 			InventoryHolder inv = e.getClickedInventory().getHolder();
-			if(inv instanceof Menu) {
+			if (inv instanceof Menu) {
 				System.out.println(e.getSlot());
 				Menu m = (Menu) inv;
 				System.out.println(m.getCommand(e.getSlot()));
