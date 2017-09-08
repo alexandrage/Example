@@ -11,10 +11,9 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		getCommand("example").setExecutor(new CommandListener(this));
 		new Scheduler(this).runTaskTimer(this, 0, 20);
-
 		cfgs = new Configs();
-		cfgs.add(this, "name1");
-		cfgs.add(this, "name2");
+		cfgs.add(this, "name1", false);
+		cfgs.add(this, "name2", false);
 		CustomConfig cfg1 = cfgs.get("name1");
 		if (!cfg1.getCfg().contains("name1")) {
 			cfg1.getCfg().set("name1", "value1");
@@ -25,7 +24,7 @@ public class Main extends JavaPlugin {
 			cfg2.getCfg().set("name2", "value2");
 			cfg2.saveCfg();
 		}
-		cfgs.add(this, "stack");
+		cfgs.add(this, "stack", true);
 		CustomConfig cfg = cfgs.get("stack");
 		stl = new StackList(cfg.getCfg());
 	}

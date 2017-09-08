@@ -15,9 +15,9 @@ public class Menu implements InventoryHolder {
 	private Inventory inventory;
 	private Map<Integer, Stack> list = new LinkedHashMap<Integer, Stack>();
 
-	public Menu(StackList stl, String title) {
+	public Menu(StackList stack, String title) {
 		int x = 0;
-		for(Entry<String, Stack> st : stl.getMap().entrySet()) {
+		for (Entry<String, Stack> st : stack.getMap().entrySet()) {
 			list.put(x, st.getValue());
 			x++;
 		}
@@ -26,7 +26,7 @@ public class Menu implements InventoryHolder {
 			inventory.setItem(i, list.get(i).getStack());
 		}
 	}
-	
+
 	public Menu(List<ItemStack> stack, String title) {
 		this.inventory = Bukkit.createInventory(this, 9 * (int) Math.ceil((double) stack.size() / 9), title);
 		for (int i = 0; i < stack.size(); i++) {
@@ -38,13 +38,14 @@ public class Menu implements InventoryHolder {
 	public Inventory getInventory() {
 		return this.inventory;
 	}
-	
+
 	public Stack getStack(int i) {
 		return list.get(i);
 	}
-	
+
 	public String getCommand(int i) {
-		if(list.get(i)==null) return null;
+		if (list.get(i) == null)
+			return null;
 		return list.get(i).getCommand();
 	}
 }

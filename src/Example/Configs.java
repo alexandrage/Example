@@ -16,8 +16,8 @@ public class Configs {
 		return sfg;
 	}
 
-	public void add(JavaPlugin plugin, String name) {
-		CustomConfig custom = new CustomConfig(plugin, name);
+	public void add(JavaPlugin plugin, String name, boolean isResource) {
+		CustomConfig custom = new CustomConfig(plugin, name, isResource);
 		sfg.put(name, custom);
 	}
 }

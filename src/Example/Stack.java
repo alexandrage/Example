@@ -71,7 +71,7 @@ public class Stack {
 		stack.setItemMeta(meta);
 		return stack;
 	}
-	
+
 	String getCommand() {
 		return this.command;
 	}
