@@ -123,4 +123,16 @@ public class Example {
 			is.setItemMeta(bmeta);
 		}
 	}
+	
+	public static void setShieldMeta(ItemStack is, String basecolor) {
+		if (is.getType() == Material.SHIELD) {
+			ItemMeta meta = is.getItemMeta();
+			BlockStateMeta bmeta = (BlockStateMeta) meta;
+			Banner banner = (Banner) bmeta.getBlockState();
+			banner.setBaseColor(DyeColor.valueOf(basecolor));
+			banner.update();
+			bmeta.setBlockState(banner);
+			is.setItemMeta(bmeta);
+		}
+	}
 }
