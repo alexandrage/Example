@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Banner;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Example {
 	public static Location setDirection(Location loc, Location lookat) {
@@ -102,5 +109,18 @@ public class Example {
 			list.add(elem);
 		}
 		return list;
+	}
+	
+	public static void setShieldMeta(ItemStack is, String basecolor, String patternColor, String patternType) {
+		if (is.getType() == Material.SHIELD) {
+			ItemMeta meta = is.getItemMeta();
+			BlockStateMeta bmeta = (BlockStateMeta) meta;
+			Banner banner = (Banner) bmeta.getBlockState();
+			banner.setBaseColor(DyeColor.valueOf(basecolor));
+			banner.addPattern(new Pattern(DyeColor.valueOf(patternColor), PatternType.valueOf(patternType)));
+			banner.update();
+			bmeta.setBlockState(banner);
+			is.setItemMeta(bmeta);
+		}
 	}
 }

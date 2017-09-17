@@ -8,5 +8,4 @@ public class EventListener implements Listener {
 	public EventListener(Main instance) {
 		this.plugin = instance;
 	}
-
 }

@@ -1,17 +1,27 @@
 package Example;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 	public Configs cfgs;
 	public StackList stl;
+	public Menu menu;
+	public FaceEnchantment ench;
 
 	public void onEnable() {
+		ench = new FaceEnchantment(120);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
-		getCommand("example").setExecutor(new CommandListener(this));
-		new Scheduler(this).runTaskTimer(this, 0, 20);
 		cfgs = new Configs();
+		cfgs.add(this, "stack", true);
+		CustomConfig cfg = cfgs.get("stack");
+		stl = new StackList(cfg.getCfg());
+		menu = new Menu(this.stl, "gui");
 		cfgs.add(this, "name1", false);
 		cfgs.add(this, "name2", false);
 		CustomConfig cfg1 = cfgs.get("name1");
@@ -24,9 +34,21 @@ public class Main extends JavaPlugin {
 			cfg2.getCfg().set("name2", "value2");
 			cfg2.saveCfg();
 		}
-		cfgs.add(this, "stack", true);
-		CustomConfig cfg = cfgs.get("stack");
-		stl = new StackList(cfg.getCfg());
+		getCommand("example").setExecutor(new CommandListener(this));
+		new Scheduler(this).runTaskTimer(this, 0, 20);
+	}
+
+	void set(FileConfiguration cfg, Map<String, Integer> map) {
+		cfg.set("keys", map);
+	}
+
+	Map<String, Integer> get(FileConfiguration cfg) {
+		ConfigurationSection cs = this.getConfig().getConfigurationSection("keys");
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for (String tmp : cs.getKeys(false)) {
+			map.put(tmp, cs.getInt(tmp));
+		}
+		return map;
 	}
 
 	static {

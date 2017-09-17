@@ -19,3 +19,4 @@ st1:
 st2:
   material: "STONE"
   amount: 5
+  command: say helo world
