@@ -146,15 +146,11 @@ public class Example {
 	public void sendActionBarMessage(Player p, String message) {
 		PacketContainer chat = new PacketContainer(PacketType.Play.Server.CHAT);
 		chat.getChatTypes().write(0, ChatType.GAME_INFO);
-		chat.getChatComponents().write(0, WrappedChatComponent.fromJson(s(message)));
+		chat.getChatComponents().write(0, WrappedChatComponent.fromText(message));
 		try {
 			ProtocolLibrary.getProtocolManager().sendServerPacket(p, chat);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public String s(String s) {
-		return "{\"text\": \"" + s + "\"}";
 	}
 }

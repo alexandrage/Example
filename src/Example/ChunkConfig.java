@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ChunkConfig {
 	private Map<String, LocationData> save = new HashMap<String, LocationData>();
@@ -44,11 +45,11 @@ public class ChunkConfig {
 			return save.get(s);
 		} else {
 			String str = "{}";
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			try {
 				File file = new File(this.plugin.getDataFolder(), s);
 				if (!file.exists()) {
-					FileUtils.writeStringToFile(file, new LocationData().toString(), Charset.defaultCharset());
+					FileUtils.writeStringToFile(file, gson.toJson(new LocationData()), Charset.defaultCharset());
 				}
 				str = FileUtils.readFileToString(file, Charset.defaultCharset());
 			} catch (IOException e) {
@@ -63,7 +64,7 @@ public class ChunkConfig {
 		for (Entry<String, LocationData> tmp : save.entrySet()) {
 			File file = new File(this.plugin.getDataFolder(), tmp.getKey());
 			try {
-				FileUtils.writeStringToFile(file, tmp.getValue().toString(), Charset.defaultCharset());
+				FileUtils.writeStringToFile(file, new GsonBuilder().setPrettyPrinting().create().toJson(tmp.getValue()), Charset.defaultCharset());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
