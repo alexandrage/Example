@@ -1,5 +1,6 @@
 package Example;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
 
 public class Example {
 	public static Location setDirection(Location loc, Location lookat) {
@@ -110,7 +117,7 @@ public class Example {
 		}
 		return list;
 	}
-	
+
 	public static void setShieldMeta(ItemStack is, String basecolor, String patternColor, String patternType) {
 		if (is.getType() == Material.SHIELD) {
 			ItemMeta meta = is.getItemMeta();
@@ -123,7 +130,7 @@ public class Example {
 			is.setItemMeta(bmeta);
 		}
 	}
-	
+
 	public static void setShieldMeta(ItemStack is, String basecolor) {
 		if (is.getType() == Material.SHIELD) {
 			ItemMeta meta = is.getItemMeta();
@@ -134,5 +141,20 @@ public class Example {
 			bmeta.setBlockState(banner);
 			is.setItemMeta(bmeta);
 		}
+	}
+
+	public void sendActionBarMessage(Player p, String message) {
+		PacketContainer chat = new PacketContainer(PacketType.Play.Server.CHAT);
+		chat.getChatTypes().write(0, ChatType.GAME_INFO);
+		chat.getChatComponents().write(0, WrappedChatComponent.fromJson(s(message)));
+		try {
+			ProtocolLibrary.getProtocolManager().sendServerPacket(p, chat);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String s(String s) {
+		return "{\"text\": \"" + s + "\"}";
 	}
 }
