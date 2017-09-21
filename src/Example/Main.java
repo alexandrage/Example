@@ -13,8 +13,11 @@ public class Main extends JavaPlugin {
 	public StackList stl;
 	public Menu menu;
 	public FaceEnchantment ench;
+	public ChunkConfig saves;
 
+	@Override
 	public void onEnable() {
+		saves = new ChunkConfig(this);
 		ench = new FaceEnchantment(120);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		cfgs = new Configs();
@@ -36,6 +39,11 @@ public class Main extends JavaPlugin {
 		}
 		getCommand("example").setExecutor(new CommandListener(this));
 		new Scheduler(this).runTaskTimer(this, 0, 20);
+	}
+	
+	@Override
+	public void onDisable() {
+		saves.Save();
 	}
 
 	void set(FileConfiguration cfg, Map<String, Integer> map) {
