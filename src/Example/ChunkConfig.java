@@ -1,17 +1,9 @@
 package Example;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class ChunkConfig {
 	private Map<String, LocationData> save = new HashMap<String, LocationData>();
@@ -40,34 +32,21 @@ public class ChunkConfig {
 	public LocationData getChunk(Location loc) {
 		int ChunkX = loc.getBlockX() >> 4;
 		int ChunkZ = loc.getBlockZ() >> 4;
-		String s = ChunkX + "." + ChunkZ + ".json";
+		String s = ChunkX + "." + ChunkZ;
 		if (save.containsKey(s)) {
 			return save.get(s);
 		} else {
-			String str = "{}";
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			try {
-				File file = new File(this.plugin.getDataFolder(), s);
-				if (!file.exists()) {
-					FileUtils.writeStringToFile(file, gson.toJson(new LocationData()), Charset.defaultCharset());
-				}
-				str = FileUtils.readFileToString(file, Charset.defaultCharset());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			save.put(s, gson.fromJson(str, LocationData.class));
+			LocationData data = new LocationData();
+			data.read(this.plugin.getDataFolder().getAbsolutePath(), s);
+			save.put(s, data);
 			return save.get(s);
 		}
 	}
 
 	public void Save() {
 		for (Entry<String, LocationData> tmp : save.entrySet()) {
-			File file = new File(this.plugin.getDataFolder(), tmp.getKey());
-			try {
-				FileUtils.writeStringToFile(file, new GsonBuilder().setPrettyPrinting().create().toJson(tmp.getValue()), Charset.defaultCharset());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			tmp.getValue().write(this.plugin.getDataFolder().getAbsolutePath(), tmp.getKey());
 		}
+		save.clear();
 	}
 }

@@ -1,12 +1,18 @@
 package Example;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import ru.minecraft.nbt.CompressedStreamTools;
+import ru.minecraft.nbt.NBTTagCompound;
 
 public class LocationData {
 	private Map<String, String> locs = new HashMap<String, String>();
@@ -39,5 +45,43 @@ public class LocationData {
 			return locs.get(convert(loc));
 		}
 		return null;
+	}
+
+	public void read(String folder, String name) {
+		NBTTagCompound nbt = new NBTTagCompound();
+		File file = new File(folder, name + ".dat");
+		if (file.exists()) {
+			try {
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		for (String n : nbt.func_150296_c()) {
+			System.out.println(n + ":" + nbt.getString(n));
+			locs.put(n, nbt.getString(n));
+		}
+	}
+
+	public void write(String folder, String name) {
+		NBTTagCompound nbt = new NBTTagCompound();
+		for (Entry<String, String> loc : locs.entrySet()) {
+			nbt.setString(loc.getKey(), loc.getValue());
+		}
+
+		for (String n : nbt.func_150296_c()) {
+			System.out.println(n + ":" + nbt.getString(n));
+		}
+		File file = new File(folder, name + ".dat");
+		System.out.println(file);
+		try {
+			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

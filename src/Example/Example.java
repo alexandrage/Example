@@ -87,8 +87,7 @@ public class Example {
 	}
 
 	public static List<String> s(String st, int spl) {
-		String str = st.substring(1, st.length() - 1);
-		String[] arrWords = str.split(" ");
+		String[] arrWords = st.split(" ");
 		ArrayList<String> arrPhrases = new ArrayList<String>();
 		StringBuilder stringBuffer = new StringBuilder();
 		int cnt = 0;
