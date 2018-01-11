@@ -3,6 +3,7 @@ package Example;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -17,6 +18,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		Bukkit.getLogger().getHandlers();
 		saves = new ChunkConfig(this);
 		ench = new FaceEnchantment(120);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
@@ -37,8 +39,7 @@ public class Main extends JavaPlugin {
 			cfg2.getCfg().set("name2", "value2");
 			cfg2.saveCfg();
 		}
-		getCommand("example").setExecutor(new CommandListener(this));
-		new Scheduler(this).runTaskTimer(this, 0, 20);
+		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example", "example");
 	}
 
 	@Override

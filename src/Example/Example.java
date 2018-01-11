@@ -4,17 +4,23 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -142,7 +148,7 @@ public class Example {
 		}
 	}
 
-	public void sendActionBarMessage(Player p, String message) {
+	public static void sendActionBarMessage(Player p, String message) {
 		PacketContainer chat = new PacketContainer(PacketType.Play.Server.CHAT);
 		chat.getChatTypes().write(0, ChatType.GAME_INFO);
 		chat.getChatComponents().write(0, WrappedChatComponent.fromText(message));
@@ -151,5 +157,27 @@ public class Example {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void setFacingDirection(BlockFace face, Block block) {
+		BlockState state = block.getState();
+		MaterialData materialData = state.getData();
+		if (materialData instanceof Directional) {
+			Directional directional = (Directional) materialData;
+			directional.setFacingDirection(face);
+			state.update();
+		}
+	}
+
+	public static List<String> list(List<String> list, int tsize) {
+		return list.stream().limit(tsize).collect(Collectors.toList());
+	}
+
+	public static <T extends Object> List<List<T>> split(List<T> list, int targetSize) {
+		List<List<T>> lists = new ArrayList<List<T>>();
+		for (int i = 0; i < list.size(); i += targetSize) {
+			lists.add(list.subList(i, Math.min(i + targetSize, list.size())));
+		}
+		return lists;
 	}
 }

@@ -14,11 +14,11 @@ public class CustomConfig {
 	CustomConfig(JavaPlugin plugin, String name, boolean isResource) {
 		this.plugin = plugin;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
+		this.file.getParentFile().mkdirs();
 		if (!this.file.exists() && isResource) {
-			this.plugin.saveResource(name + ".yml", false);
+			plugin.saveResource(name + ".yml", false);
 		}
 		yml = YamlConfiguration.loadConfiguration(file);
-		this.file.getParentFile().mkdirs();
 	}
 
 	public FileConfiguration getCfg() {
