@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,11 +23,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.MojangsonParseException;
 import net.minecraft.server.v1_12_R1.MojangsonParser;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.TileEntity;
 
 public class NBTExample {
+
 	public static ItemStack setSkullSkin(ItemStack item, String name) {
 		NBTTagCompound tag = new NBTTagCompound();
 		try {
@@ -43,10 +49,25 @@ public class NBTExample {
 		return CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nbt));
 	}
 
-	public static String nbt(JsonElement jsone) {
+	public static void setSkullSkin(Block block, Location loc, String name) {
+		try {
+			String uuid = getUUID(name);
+			CraftWorld cw = (CraftWorld) loc.getWorld();
+			TileEntity tile = cw.getHandle().getTileEntity(new BlockPosition(loc.getX(), loc.getY(), loc.getZ()));
+			NBTTagCompound NBT = new NBTTagCompound();
+			tile.save(NBT);
+			NBT = MojangsonParser.parse(nbt(getSkinProfile(uuid), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+					NBT.get("Rot").toString()));
+			tile.load(NBT);
+			block.getState().update();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static String nbt(JsonElement jsone) {
 		JsonElement prop = jsone.getAsJsonObject().get("properties");
 		JsonObject json = prop.getAsJsonArray().get(0).getAsJsonObject();
-
 		String id = jsone.getAsJsonObject().get("id").getAsString();
 		String name = jsone.getAsJsonObject().get("name").toString();
 		String value = json.get("value").toString();
@@ -56,7 +77,20 @@ public class NBTExample {
 		return tmp;
 	}
 
-	public static String getUUID(String name) throws IOException {
+	private static String nbt(JsonElement jsone, int x, int y, int z, String rot) {
+		JsonElement prop = jsone.getAsJsonObject().get("properties");
+		JsonObject json = prop.getAsJsonArray().get(0).getAsJsonObject();
+		String id = jsone.getAsJsonObject().get("id").getAsString();
+		String name = jsone.getAsJsonObject().get("name").toString();
+		String value = json.get("value").toString();
+		BigInteger b = new BigInteger(id, 16);
+		String tmp = "{Owner:{Id:\"" + new UUID(b.shiftRight(64).longValue(), b.longValue())
+				+ "\",Properties:{textures:[{Value:" + value + "}]},Name:" + name + "}" + ",Rot:" + rot + ",x:" + x
+				+ ",y:" + y + ",z:" + z + ",id:\"minecraft:skull\",SkullType:3b}";
+		return tmp;
+	}
+
+	private static String getUUID(String name) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
 				new URL("https://api.mojang.com/profiles/minecraft"));
 		connection.setRequestMethod("POST");
@@ -76,7 +110,7 @@ public class NBTExample {
 		}
 	}
 
-	public static JsonElement getSkinProfile(String id) throws IOException {
+	private static JsonElement getSkinProfile(String id) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
 				new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", "")
 						+ "?unsigned=true"));

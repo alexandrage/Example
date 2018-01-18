@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,13 +20,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.ContainerWorkbench;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.TileEntity;
 
 public class EventListener implements Listener {
 	private Plugin plugin;
@@ -32,11 +36,10 @@ public class EventListener implements Listener {
 	public EventListener(Plugin plugin) {
 		this.plugin = plugin;
 	}
-	
 
 	@EventHandler
 	public void onJoin(InventoryDragEvent e) {
-		
+
 	}
 
 	@EventHandler
@@ -71,8 +74,15 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerInteractEvent e) {
-		MaterialData data = e.getItem().getData();
-		System.out.println(data);
+		if (e.getHand()==EquipmentSlot.HAND) {
+			NBTTagCompound NBT = new NBTTagCompound();
+			Location loc = e.getClickedBlock().getLocation();
+			CraftWorld cw = (CraftWorld) loc.getWorld();
+			TileEntity tile = cw.getHandle().getTileEntity(new BlockPosition(loc.getX(), loc.getY(), loc.getZ()));
+			tile.save(NBT);
+			System.out.println(NBT);
+			NBTExample.setSkullSkin(e.getClickedBlock(), e.getClickedBlock().getLocation(), "zenit_");
+		}
 	}
 
 	/*
@@ -92,19 +102,6 @@ public class EventListener implements Listener {
 	 * field.get(soundeffecttype); world.a(null, loc.getX(), loc.getY(),
 	 * loc.getZ(), se, SoundCategory.NEUTRAL, soundeffecttype.a(), 0.8f); }
 	 */
-
-	@EventHandler
-	public void on(PlayerToggleFlightEvent e) {
-		e.getPlayer().getInventory().getItemInMainHand();
-		e.getPlayer().getInventory().getItemInOffHand();
-	}
-
-	@EventHandler
-	public void on(InventoryClickEvent e) {
-		e.getCurrentItem();
-		e.getCursor();
-		e.getSlot();
-	}
 
 	@EventHandler
 	public void onCom(ServerCommandEvent e) {
