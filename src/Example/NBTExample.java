@@ -1,16 +1,19 @@
 package Example;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -90,7 +93,12 @@ public class NBTExample {
 		return tmp;
 	}
 
-	private static String getUUID(String name) throws IOException {
+	public static String getUUID(String name) throws IOException {
+		File file = new File("./uuids/"+name+".json");
+		file.getParentFile().mkdirs();
+		if(file.exists()) {
+			return FileUtils.readFileToString(file, Charset.defaultCharset());
+		}
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
 				new URL("https://api.mojang.com/profiles/minecraft"));
 		connection.setRequestMethod("POST");
@@ -104,13 +112,20 @@ public class NBTExample {
 		String result = IOUtils.toString(is, StandardCharsets.UTF_8);
 		if (result.length() > 2) {
 			JsonElement jsone = parse.parse(result).getAsJsonArray().get(0);
+			FileUtils.writeStringToFile(file, jsone.getAsJsonObject().get("id").getAsString(), Charset.defaultCharset());
 			return jsone.getAsJsonObject().get("id").getAsString();
 		} else {
 			return null;
 		}
 	}
 
-	private static JsonElement getSkinProfile(String id) throws IOException {
+	public static JsonElement getSkinProfile(String id) throws IOException {
+		File file = new File("./profile/"+id+".json");
+		file.getParentFile().mkdirs();
+		JsonParser parse = new JsonParser();
+		if(file.exists()) {
+			return parse.parse(FileUtils.readFileToString(file, Charset.defaultCharset()));
+		}
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
 				new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", "")
 						+ "?unsigned=true"));
@@ -119,7 +134,7 @@ public class NBTExample {
 		}
 		InputStream is = connection.getInputStream();
 		String result = IOUtils.toString(is, StandardCharsets.UTF_8);
-		JsonParser parse = new JsonParser();
+		FileUtils.writeStringToFile(file, result ,Charset.defaultCharset());
 		return parse.parse(result);
 	}
 
