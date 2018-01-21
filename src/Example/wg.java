@@ -73,8 +73,8 @@ public class wg {
 	private static void checkRegionDoesNotExist(RegionManager manager, String id, boolean mayRedefine)
 			throws CommandException {
 		if (manager.hasRegion(id)) {
-			throw new CommandException("A region with that name already exists. Please choose another name."
-					+ (mayRedefine ? " To change the shape, use /region redefine " + id + "." : ""));
+			throw new CommandException("Область с таким именем уже существует. Выберите другое имя."
+					+ (mayRedefine ? " Чтобы изменить форму, используйте / region redefine " + id + "." : ""));
 		}
 	}
 }
