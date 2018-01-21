@@ -2,13 +2,15 @@ package Example;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,10 +19,12 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -171,5 +175,15 @@ public class Example {
 			lists.add(list.subList(i, Math.min(i + targetSize, list.size())));
 		}
 		return lists;
+	}
+
+	public static void addRecipe(Plugin plugin, ItemStack stack, ItemStack[] istack) {
+		ShapedRecipe rc = new ShapedRecipe(new NamespacedKey(plugin, UUID.randomUUID().toString()), stack);
+		rc.shape("012", "345", "678");
+		for (int i = 0; i < 9; i++) {
+			if (istack[i] != null && istack[i].getType() != Material.AIR)
+				rc.setIngredient(String.valueOf(i).toCharArray()[0], istack[i].getType());
+		}
+		Bukkit.getServer().addRecipe(rc);
 	}
 }

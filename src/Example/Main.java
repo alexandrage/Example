@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -40,6 +42,8 @@ public class Main extends JavaPlugin {
 			cfg2.saveCfg();
 		}
 		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example", "example");
+		ItemStack stack = new ItemStack(Material.STONE);
+		Example.addRecipe(this, stack, new ItemStack[]{stack,stack,stack,stack,stack,stack});
 	}
 
 	@Override

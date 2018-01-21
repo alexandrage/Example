@@ -70,19 +70,6 @@ public class EventListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void on(PlayerInteractEvent e) {
-		if (e.getHand()==EquipmentSlot.HAND) {
-			NBTTagCompound NBT = new NBTTagCompound();
-			Location loc = e.getClickedBlock().getLocation();
-			CraftWorld cw = (CraftWorld) loc.getWorld();
-			TileEntity tile = cw.getHandle().getTileEntity(new BlockPosition(loc.getX(), loc.getY(), loc.getZ()));
-			tile.save(NBT);
-			System.out.println(NBT);
-			NBTExample.setSkullSkin(e.getClickedBlock(), e.getClickedBlock().getLocation(), "zenit_");
-		}
-	}
-
 	/*
 	 * @EventHandler public void on(PlayerInteractEvent e) throws Exception {
 	 * e.setCancelled(true); Block block = e.getClickedBlock(); Location loc =
