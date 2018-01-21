@@ -25,25 +25,26 @@ public class wg {
 		LocalPlayer localPlayer = wg.wrapPlayer(player);
 		RegionManager manager = wg.getRegionContainer().get(world);
 		checkRegionDoesNotExist(manager, id, false);
+		checkRegionId(id, false);
 		ApplicableRegionSet regions = manager.getApplicableRegions(checkRegionFromSelection(player, id));
 		if (regions.size() > 0) {
 			if (!regions.isOwnerOfAll(localPlayer)) {
-				throw new CommandException("This region overlaps with someone else's region.");
+				throw new CommandException("Эта область перекрывается с чужой областью.");
 			}
 		}
 	}
 
-	protected static Selection checkSelection(Player player) throws CommandException {
+	private static Selection checkSelection(Player player) throws CommandException {
 		WorldEditPlugin worldEdit = WorldGuardPlugin.inst().getWorldEdit();
 		Selection selection = worldEdit.getSelection(player);
 		if (selection == null) {
 			throw new CommandException(
-					"Please select an area first. Use WorldEdit to make a selection! (wiki: http://wiki.sk89q.com/wiki/WorldEdit).");
+					"Сначала выберите область. Используйте WorldEdit, чтобы сделать выбор! (wiki: http://wiki.sk89q.com/wiki/WorldEdit).");
 		}
 		return selection;
 	}
 
-	protected static ProtectedRegion checkRegionFromSelection(Player player, String id) throws CommandException {
+	private static ProtectedRegion checkRegionFromSelection(Player player, String id) throws CommandException {
 		Selection selection = checkSelection(player);
 		if ((selection instanceof Polygonal2DSelection)) {
 			Polygonal2DSelection polySel = (Polygonal2DSelection) selection;
@@ -56,20 +57,20 @@ public class wg {
 			BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 			return new ProtectedCuboidRegion(id, min, max);
 		}
-		throw new CommandException("Sorry, you can only use cuboids and polygons for WorldGuard regions.");
+		throw new CommandException("К сожалению, вы можете использовать только кубоиды и полигоны для регионов WorldGuard.");
 	}
 
-	protected static String checkRegionId(String id, boolean allowGlobal) throws CommandException {
+	private static String checkRegionId(String id, boolean allowGlobal) throws CommandException {
 		if (!ProtectedRegion.isValidId(id)) {
-			throw new CommandException("The region name of '" + id + "' contains characters that are not allowed.");
+			throw new CommandException("Название области '" + id + "' содержит символы, которые не разрешены.");
 		}
 		if ((!allowGlobal) && (id.equalsIgnoreCase("__global__"))) {
-			throw new CommandException("Sorry, you can't use __global__ here.");
+			throw new CommandException("Извините, здесь вы не можете использовать __global__.");
 		}
 		return id;
 	}
 
-	protected static void checkRegionDoesNotExist(RegionManager manager, String id, boolean mayRedefine)
+	private static void checkRegionDoesNotExist(RegionManager manager, String id, boolean mayRedefine)
 			throws CommandException {
 		if (manager.hasRegion(id)) {
 			throw new CommandException("A region with that name already exists. Please choose another name."

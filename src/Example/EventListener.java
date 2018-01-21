@@ -1,31 +1,30 @@
 package Example;
 
-import java.lang.reflect.Field;
+//import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
+//import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
+//import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
+//import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.ContainerWorkbench;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.TileEntity;
+import com.sk89q.minecraft.util.commands.CommandException;
+
+//import net.minecraft.server.v1_12_R1.BlockPosition;
+//import net.minecraft.server.v1_12_R1.ContainerWorkbench;
 
 public class EventListener implements Listener {
 	//TODO
@@ -35,22 +34,7 @@ public class EventListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler
-	public void onJoin(InventoryDragEvent e) {
-
-	}
-
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e) {
-		String message = "";
-		e.setJoinMessage(message.replace("%player%", e.getPlayer().getName()));
-	}
-
-	@EventHandler
-	public void on(PlayerCommandPreprocessEvent e) {
-
-	}
-
+	/*
 	@EventHandler
 	public void onPlayerCraft(CraftItemEvent e) throws Exception {
 		if (e.getInventory().getType() == InventoryType.WORKBENCH) {
@@ -69,6 +53,7 @@ public class EventListener implements Listener {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 	/*
 	 * @EventHandler public void on(PlayerInteractEvent e) throws Exception {
