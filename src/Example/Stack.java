@@ -28,7 +28,7 @@ public class Stack {
 	private String command;
 
 	@SuppressWarnings("unchecked")
-	Stack(ConfigurationSection config) {
+	public Stack(ConfigurationSection config) {
 		this.material = config.getString("material");
 		this.amount = config.getInt("amount");
 		this.date = config.getInt("date");
@@ -45,7 +45,7 @@ public class Stack {
 		this.command = config.getString("command");
 	}
 
-	ItemStack getStack() {
+	public ItemStack getStack() {
 		ItemStack stack = new ItemStack(Material.valueOf(material.toUpperCase()), amount, (short) date);
 		ItemMeta meta = stack.getItemMeta();
 		if (customname != null) {
@@ -72,7 +72,7 @@ public class Stack {
 		return stack;
 	}
 
-	String getCommand() {
+	public String getCommand() {
 		return this.command;
 	}
 

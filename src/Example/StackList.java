@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 public class StackList {
 	private Map<String, Stack> stack = new LinkedHashMap<String, Stack>();
 
-	StackList(FileConfiguration cfgs) {
+	public StackList(FileConfiguration cfgs) {
 		for (String cfg : cfgs.getKeys(false)) {
 			stack.put(cfg, new Stack(cfgs.getConfigurationSection(cfg)));
 		}

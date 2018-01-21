@@ -43,7 +43,8 @@ public class Main extends JavaPlugin {
 		}
 		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example", "example");
 		ItemStack stack = new ItemStack(Material.STONE);
-		Example.addRecipe(this, stack, new ItemStack[]{stack,stack,stack,stack,stack,stack,stack,stack,stack});
+		ItemStack istack = new ItemStack(Material.DIAMOND);
+		Example.addRecipe(this, stack, new ItemStack[]{istack,istack,istack,istack,istack,istack,istack,istack,istack});
 	}
 
 	@Override
