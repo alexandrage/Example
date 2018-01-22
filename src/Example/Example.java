@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.BlockIterator;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -185,5 +186,18 @@ public class Example {
 				rc.setIngredient(String.valueOf(i).toCharArray()[0], istack[i].getType());
 		}
 		Bukkit.getServer().addRecipe(rc);
+	}
+
+	public static Block getTarget(Player player, Integer range) {
+		BlockIterator bi = new BlockIterator(player, range);
+		Block lastBlock = bi.next();
+		while (bi.hasNext()) {
+			lastBlock = bi.next();
+			if (lastBlock.getType() == Material.AIR) {
+				continue;
+			}
+			break;
+		}
+		return lastBlock;
 	}
 }

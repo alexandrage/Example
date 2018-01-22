@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 //import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,33 +28,47 @@ import com.sk89q.minecraft.util.commands.CommandException;
 //import net.minecraft.server.v1_12_R1.ContainerWorkbench;
 
 public class EventListener implements Listener {
-	//TODO
+	// TODO
 	private Plugin plugin;
 
 	public EventListener(Plugin plugin) {
 		this.plugin = plugin;
 	}
 
-	/*
 	@EventHandler
-	public void onPlayerCraft(CraftItemEvent e) throws Exception {
-		if (e.getInventory().getType() == InventoryType.WORKBENCH) {
-			CraftInventoryView inv = (CraftInventoryView) e.getView();
-			BlockPosition bp = (BlockPosition) field.get(inv.getHandle());
-			System.out.println(bp.getX() + " " + bp.getY() + " " + bp.getZ());
-		}
+	public void interact(PlayerInteractEvent e) {
+		//Player player = e.getPlayer();
+		//try {
+		//	wg.get(player, player.getName()+e.getClickedBlock().getChunk(), player.getWorld());
+		//	player.sendMessage("Ок");
+		//} catch (CommandException ex) {
+		//	player.sendMessage(ex.getMessage());
+		//}
 	}
 
-	static Field field = null;
-	static {
-		try {
-			field = ContainerWorkbench.class.getDeclaredField("h");
-			field.setAccessible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@EventHandler
+	public void on(PlayerCommandPreprocessEvent e) {
+		Player player = e.getPlayer();
+		player.sendMessage(Example.getTarget(player, 5).toString());
+		/*
+		 * player.sendMessage("Hello, Hello world"); try { wg.get(player,
+		 * "rg_id", player.getWorld()); } catch (CommandException ex) {
+		 * player.sendMessage(ex.getMessage()); }
+		 */
 	}
-	*/
+
+	/*
+	 * @EventHandler public void onPlayerCraft(CraftItemEvent e) throws
+	 * Exception { if (e.getInventory().getType() == InventoryType.WORKBENCH) {
+	 * CraftInventoryView inv = (CraftInventoryView) e.getView(); BlockPosition
+	 * bp = (BlockPosition) field.get(inv.getHandle());
+	 * System.out.println(bp.getX() + " " + bp.getY() + " " + bp.getZ()); } }
+	 * 
+	 * static Field field = null; static { try { field =
+	 * ContainerWorkbench.class.getDeclaredField("h");
+	 * field.setAccessible(true); } catch (Exception e) { e.printStackTrace(); }
+	 * }
+	 */
 
 	/*
 	 * @EventHandler public void on(PlayerInteractEvent e) throws Exception {

