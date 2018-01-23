@@ -62,51 +62,51 @@ public class BaseComponent {
 	public void setHoverEvent(HoverEvent hoverEvent) {
 		this.hoverEvent = hoverEvent;
 	}
-	
+
 	public void setExtra(BaseComponent[] extra) {
 		this.extra = extra;
 	}
-	
+
 	public String getText() {
 		return this.text;
 	}
-	
+
 	public ChatColor getColor() {
 		return this.color;
 	}
-	
+
 	public Boolean setBold() {
 		return this.bold;
 	}
-	
+
 	public Boolean getItalic() {
 		return this.italic;
 	}
-	
+
 	public Boolean getUnderlined() {
 		return this.underlined;
 	}
-	
+
 	public Boolean getStrikethrough() {
 		return this.strikethrough;
 	}
-	
+
 	public Boolean setObfuscated() {
 		return this.obfuscated;
 	}
-	
+
 	public String getInsertion() {
 		return this.insertion;
 	}
-	
+
 	public ClickEvent getClickEvent() {
 		return this.clickEvent;
 	}
-	
+
 	public HoverEvent getHoverEvent() {
 		return this.hoverEvent;
 	}
-	
+
 	public BaseComponent[] getExtra() {
 		return this.extra;
 	}
@@ -114,5 +114,46 @@ public class BaseComponent {
 	public String toString() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(this);
+	}
+
+	public String toText() {
+		StringBuilder sb = new StringBuilder();
+		if (this.color != null) {
+			sb.append("§" + Integer.toHexString(color.ordinal()));
+		}
+		if (this.bold != null) {
+			if (this.bold) {
+				sb.append("§l");
+			}
+		}
+		if (this.italic != null) {
+			if (this.italic) {
+				sb.append("§n");
+			}
+		}
+		if (this.underlined != null) {
+			if (this.underlined) {
+				sb.append("§m");
+			}
+		}
+		if (this.strikethrough != null) {
+			if (this.strikethrough) {
+				sb.append("§o");
+			}
+		}
+		if (this.obfuscated != null) {
+			if (this.obfuscated) {
+				sb.append("§k");
+			}
+		}
+		if (this.text != null) {
+			sb.append(this.text);
+		}
+		if (this.extra != null) {
+			for (BaseComponent base : extra) {
+				sb.append(base.toText());
+			}
+		}
+		return sb.toString();
 	}
 }

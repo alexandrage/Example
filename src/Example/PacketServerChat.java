@@ -25,6 +25,9 @@ public class PacketServerChat extends PacketAdapter {
 				Gson gson = new Gson();
 				BaseComponent bs = gson.fromJson(wchat.getJson(), BaseComponent.class);
 				System.out.println(bs);
+				System.out.println("---");
+				System.out.println(bs.toText());
+				System.out.println("---");
 			}
 		}
 	}
