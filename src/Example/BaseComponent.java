@@ -156,4 +156,40 @@ public class BaseComponent {
 		}
 		return sb.toString();
 	}
+	
+	public String getLegacyText() {
+		StringBuilder sb = new StringBuilder();
+		if (this.color != null) {
+			sb.append("§" + Integer.toHexString(color.ordinal()));
+		}
+		if (this.bold != null) {
+			if (this.bold) {
+				sb.append("§l");
+			}
+		}
+		if (this.italic != null) {
+			if (this.italic) {
+				sb.append("§n");
+			}
+		}
+		if (this.underlined != null) {
+			if (this.underlined) {
+				sb.append("§m");
+			}
+		}
+		if (this.strikethrough != null) {
+			if (this.strikethrough) {
+				sb.append("§o");
+			}
+		}
+		if (this.obfuscated != null) {
+			if (this.obfuscated) {
+				sb.append("§k");
+			}
+		}
+		if (this.text != null) {
+			sb.append(this.text);
+		}
+		return sb.toString();
+	}
 }
