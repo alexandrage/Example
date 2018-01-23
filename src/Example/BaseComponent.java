@@ -116,7 +116,7 @@ public class BaseComponent {
 		return gson.toJson(this);
 	}
 
-	public String toText() {
+	public String toLegacyText() {
 		StringBuilder sb = new StringBuilder();
 		if (this.color != null) {
 			sb.append("§" + Integer.toHexString(color.ordinal()));
