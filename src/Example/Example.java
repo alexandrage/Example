@@ -33,8 +33,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
 
-import net.ess3.api.IEssentials;
-
 public class Example {
 	public static Location setDirection(Location loc, Location lookat) {
 		loc = loc.clone();
