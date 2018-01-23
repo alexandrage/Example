@@ -151,7 +151,7 @@ public class BaseComponent {
 		}
 		if (this.extra != null) {
 			for (BaseComponent base : extra) {
-				sb.append(base.toText());
+				sb.append(base.toLegacyText());
 			}
 		}
 		return sb.toString();
