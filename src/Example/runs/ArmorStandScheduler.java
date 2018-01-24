@@ -1,4 +1,4 @@
-package Example;
+package Example.runs;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +20,7 @@ public class ArmorStandScheduler implements Runnable {
 	private List<ItemStack> stacks;
 	private int index = 0;
 
-	ArmorStandScheduler(List<Location> circle, List<ItemStack> stacks) {
+	public ArmorStandScheduler(List<Location> circle, List<ItemStack> stacks) {
 		this.circle = circle;
 		this.stacks = stacks;
 		for (int i = 0; i < circle.size(); i = i + 5) {

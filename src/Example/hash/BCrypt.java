@@ -1,4 +1,4 @@
-package Example;
+package Example.hash;
 
 import java.io.UnsupportedEncodingException;
 

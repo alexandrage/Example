@@ -1,11 +1,19 @@
-package Example;
+package Example.event;
 
+import java.lang.reflect.Field;
 //import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 //import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,11 +26,15 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.minecraft.util.commands.CommandException;
+
+import Example.wg;
+import Example.runs.ArmorStandScheduler;
 
 //import net.minecraft.server.v1_12_R1.BlockPosition;
 //import net.minecraft.server.v1_12_R1.ContainerWorkbench;
@@ -34,22 +46,35 @@ public class EventListener implements Listener {
 	public EventListener(Plugin plugin) {
 		this.plugin = plugin;
 	}
-
+	
 	@EventHandler
-	public void interact(PlayerInteractEvent e) {
-		//Player player = e.getPlayer();
-		//try {
-		//	wg.get(player, player.getName()+e.getClickedBlock().getChunk(), player.getWorld());
-		//	player.sendMessage("Ок");
-		//} catch (CommandException ex) {
-		//	player.sendMessage(ex.getMessage());
-		//}
+	public void onTab(TabCompleteEvent e) {
+		List<String> tmp = e.getCompletions();
+		if(!tmp.contains("Admin")) {
+			tmp.add("Admin");
+		}
+		if(!tmp.contains("zenit_")) {
+			tmp.add("zenit_");
+		}
+		Collections.sort(tmp);
+		e.setCompletions(tmp);
 	}
 
 	@EventHandler
-	public void on(PlayerCommandPreprocessEvent e) {
+	public void interact(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
-		player.sendMessage(Example.getTarget(player, 5).toString());
+		try {
+			Chunk chunk = e.getClickedBlock().getChunk();
+			wg.get(player, player.getName()+chunk.getX()+chunk.getZ(), player.getWorld());
+			player.sendMessage("Ок");
+		} catch (CommandException ex) {
+			player.sendMessage(ex.getMessage());
+		}
+	}
+	
+	@EventHandler
+	public void on(PlayerCommandPreprocessEvent e) {
+		
 		/*
 		 * player.sendMessage("Hello, Hello world"); try { wg.get(player,
 		 * "rg_id", player.getWorld()); } catch (CommandException ex) {

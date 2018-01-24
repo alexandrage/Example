@@ -1,4 +1,4 @@
-package Example;
+package Example.sfg;
 
 import java.io.File;
 import org.bukkit.configuration.file.FileConfiguration;

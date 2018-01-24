@@ -10,6 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import Example.sfg.Stack;
+import Example.sfg.StackList;
+
 public class Menu implements InventoryHolder {
 
 	private Inventory inventory;

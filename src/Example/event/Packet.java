@@ -1,8 +1,11 @@
-package Example;
+package Example.event;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+
+import Example.Main;
+import Example.chatser.PacketServerChat;
 
 public class Packet {
 	public void hack(Main plugin) {

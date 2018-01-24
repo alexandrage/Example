@@ -1,6 +1,7 @@
 package Example;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -9,9 +10,26 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import Example.ench.FaceEnchantment;
+import Example.event.CommandListener;
+import Example.event.CommandRegister;
+import Example.event.EventListener;
+import Example.event.Packet;
+import Example.runs.Scheduler;
+import Example.sfg.ChunkConfig;
+import Example.sfg.Configs;
+import Example.sfg.CustomConfig;
+import Example.sfg.MapSer;
+import Example.sfg.StackList;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+
 public class Main extends JavaPlugin {
+	public static Chat chat = null;
+	public static Economy economy = null;
 	public Configs cfgs;
 	public StackList stl;
 	public Menu menu;
@@ -20,6 +38,9 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		new Scheduler().runTaskTimer(this, 20, 20);
+		setupChat();
+		setupEconomy();
 		new Packet().hack(this);
 		Bukkit.getLogger().getHandlers();
 		saves = new ChunkConfig(this);
@@ -69,5 +90,22 @@ public class Main extends JavaPlugin {
 
 	static {
 		ConfigurationSerialization.registerClass(MapSer.class, "MapSer");
+	}
+
+	private boolean setupChat() {
+		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(Chat.class);
+		if (chatProvider != null) {
+			chat = (Chat) chatProvider.getProvider();
+		}
+		return chat != null;
+	}
+
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
+				.getRegistration(Economy.class);
+		if (economyProvider != null) {
+			economy = (Economy) economyProvider.getProvider();
+		}
+		return economy != null;
 	}
 }

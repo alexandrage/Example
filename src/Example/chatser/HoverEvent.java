@@ -1,4 +1,4 @@
-package Example;
+package Example.chatser;
 
 public class HoverEvent {
 	public HoverEvent(Action action, BaseComponent value) {

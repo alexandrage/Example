@@ -1,4 +1,4 @@
-package Example;
+package Example.chatser;
 
 public class ClickEvent {
 	public ClickEvent(Action action, String value) {

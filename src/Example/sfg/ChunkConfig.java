@@ -1,15 +1,17 @@
-package Example;
+package Example.sfg;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.bukkit.Location;
 
+import Example.Main;
+
 public class ChunkConfig {
 	private Map<String, LocationData> save = new HashMap<String, LocationData>();
 	private Main plugin;
 
-	ChunkConfig(Main plugin) {
+	public ChunkConfig(Main plugin) {
 		this.plugin = plugin;
 	}
 

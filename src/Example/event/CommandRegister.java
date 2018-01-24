@@ -1,4 +1,4 @@
-package Example;
+package Example.event;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
