@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import Example.chest.Menu;
 import Example.ench.FaceEnchantment;
 import Example.event.CommandListener;
 import Example.event.CommandRegister;

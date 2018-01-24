@@ -1,4 +1,4 @@
-package Example;
+package Example.chest;
 
 import java.util.LinkedHashMap;
 import java.util.List;
