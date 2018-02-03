@@ -24,11 +24,11 @@ public class PacketServerChat extends PacketAdapter {
 			if (wchat != null) {
 				Gson gson = new Gson();
 				BaseComponent bs = gson.fromJson(wchat.getJson(), BaseComponent.class);
-				System.out.println("---");
-				System.out.println(bs);
-				System.out.println("---");
-				System.out.println(bs.toLegacyText());
-				System.out.println("---");
+				//System.out.println("---");
+				//System.out.println(bs);
+				//System.out.println("---");
+				//System.out.println(bs.toLegacyText());
+				//System.out.println("---");
 			}
 		}
 	}

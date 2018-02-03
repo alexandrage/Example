@@ -60,6 +60,7 @@ public class ArmorStandScheduler implements Runnable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void spawn(int i) {
 		Location l = circle.get(i);
 		ItemStack stack = stacks.get(index);

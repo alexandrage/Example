@@ -1,7 +1,8 @@
 package Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -9,15 +10,18 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import Example.chest.Menu;
 import Example.ench.FaceEnchantment;
+import Example.event.CMDReload;
 import Example.event.CommandListener;
 import Example.event.CommandRegister;
 import Example.event.EventListener;
+import Example.event.ICMD;
 import Example.event.Packet;
 import Example.runs.Scheduler;
 import Example.sfg.ChunkConfig;
@@ -25,8 +29,10 @@ import Example.sfg.Configs;
 import Example.sfg.CustomConfig;
 import Example.sfg.MapSer;
 import Example.sfg.StackList;
+import net.ess3.api.IEssentials;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import tick.ITickEvent;
 
 public class Main extends JavaPlugin {
 	public static Chat chat = null;
@@ -36,10 +42,16 @@ public class Main extends JavaPlugin {
 	public Menu menu;
 	public FaceEnchantment ench;
 	public ChunkConfig saves;
+	public IEssentials ess = null;
+	public List<Player> ps = new ArrayList<Player>();
+	public ITickEvent tick;
+	public Map<String, ICMD> cmds = new HashMap<String, ICMD>();
 
 	@Override
 	public void onEnable() {
-		new Scheduler().runTaskTimer(this, 20, 20);
+		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
+		new Scheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
+		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
 		setupChat();
 		setupEconomy();
 		new Packet().hack(this);
@@ -64,7 +76,9 @@ public class Main extends JavaPlugin {
 			cfg2.getCfg().set("name2", "value2");
 			cfg2.saveCfg();
 		}
-		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example", "example");
+		cmds.put("reload", new CMDReload(this));
+		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example",
+				"/example reload");
 		ItemStack stack = new ItemStack(Material.STONE);
 		ItemStack istack = new ItemStack(Material.DIAMOND);
 		Example.addRecipe(this, stack,

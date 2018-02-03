@@ -1,120 +1,61 @@
 package Example.event;
 
-import java.lang.reflect.Field;
-//import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-//import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-//import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-//import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
-
-import com.sk89q.minecraft.util.commands.CommandException;
-
-import Example.wg;
+import Example.Main;
+import Example.NBTExample;
 import Example.runs.ArmorStandScheduler;
-
-//import net.minecraft.server.v1_12_R1.BlockPosition;
-//import net.minecraft.server.v1_12_R1.ContainerWorkbench;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 public class EventListener implements Listener {
-	// TODO
-	private Plugin plugin;
+	private Main plugin;
 
-	public EventListener(Plugin plugin) {
+	public EventListener(Main plugin) {
 		this.plugin = plugin;
 	}
+
+	@EventHandler
+	public void on(CraftItemEvent e) throws Exception {
+		Location loc = NBTExample.getPosition(e);
+		System.out.println(loc.getX() + " " + loc.getY() + " " + loc.getZ());
+	}
 	
 	@EventHandler
-	public void onTab(TabCompleteEvent e) {
-		List<String> tmp = e.getCompletions();
-		if(!tmp.contains("Admin")) {
-			tmp.add("Admin");
-		}
-		if(!tmp.contains("zenit_")) {
-			tmp.add("zenit_");
-		}
-		Collections.sort(tmp);
-		e.setCompletions(tmp);
+	public void on(BlockDispenseEvent e) {
+		System.out.println(e.getItem());
+		System.out.println(e.getBlock());
+	}
+	
+	@EventHandler
+	public void on(PlayerJoinEvent e) {
+		this.plugin.ps.add(e.getPlayer());
+		String s = PlaceholderAPI.setBracketPlaceholders(e.getPlayer(), "%player_name%");
+		e.setJoinMessage(s);
 	}
 
 	@EventHandler
-	public void interact(PlayerInteractEvent e) {
-		Player player = e.getPlayer();
-		try {
-			Chunk chunk = e.getClickedBlock().getChunk();
-			wg.get(player, player.getName()+chunk.getX()+chunk.getZ(), player.getWorld());
-			player.sendMessage("Ок");
-		} catch (CommandException ex) {
-			player.sendMessage(ex.getMessage());
-		}
-	}
-	
-	@EventHandler
-	public void on(PlayerCommandPreprocessEvent e) {
+	public void on(AsyncPlayerChatEvent e) {
+		Player p = e.getPlayer();
+		p.sendMessage(this.plugin.tick.getPlayerTime(p)+"");
 		
-		/*
-		 * player.sendMessage("Hello, Hello world"); try { wg.get(player,
-		 * "rg_id", player.getWorld()); } catch (CommandException ex) {
-		 * player.sendMessage(ex.getMessage()); }
-		 */
 	}
-
-	/*
-	 * @EventHandler public void onPlayerCraft(CraftItemEvent e) throws
-	 * Exception { if (e.getInventory().getType() == InventoryType.WORKBENCH) {
-	 * CraftInventoryView inv = (CraftInventoryView) e.getView(); BlockPosition
-	 * bp = (BlockPosition) field.get(inv.getHandle());
-	 * System.out.println(bp.getX() + " " + bp.getY() + " " + bp.getZ()); } }
-	 * 
-	 * static Field field = null; static { try { field =
-	 * ContainerWorkbench.class.getDeclaredField("h");
-	 * field.setAccessible(true); } catch (Exception e) { e.printStackTrace(); }
-	 * }
-	 */
-
-	/*
-	 * @EventHandler public void on(PlayerInteractEvent e) throws Exception {
-	 * e.setCancelled(true); Block block = e.getClickedBlock(); Location loc =
-	 * block.getLocation(); Method method =
-	 * CraftBlock.class.getDeclaredMethod("getNMSBlock");
-	 * method.setAccessible(true); net.minecraft.server.v1_12_R1.Block b =
-	 * (net.minecraft.server.v1_12_R1.Block)method.invoke(block);
-	 * SoundEffectType soundeffecttype = b.getStepSound(); CraftWorld w =
-	 * (CraftWorld) loc.getWorld(); net.minecraft.server.v1_12_R1.World world =
-	 * w.getHandle(); Field field = SoundEffectType.class.getDeclaredField("o");
-	 * field.setAccessible(true); Field modifiersField =
-	 * Field.class.getDeclaredField("modifiers");
-	 * modifiersField.setAccessible(true); modifiersField.setInt(field,
-	 * field.getModifiers() & ~Modifier.FINAL); SoundEffect se = (SoundEffect)
-	 * field.get(soundeffecttype); world.a(null, loc.getX(), loc.getY(),
-	 * loc.getZ(), se, SoundCategory.NEUTRAL, soundeffecttype.a(), 0.8f); }
-	 */
-
+	
 	@EventHandler
-	public void onCom(ServerCommandEvent e) {
+	public void on(ServerCommandEvent e) {
 
 	}
 

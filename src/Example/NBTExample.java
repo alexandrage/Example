@@ -4,6 +4,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,9 +18,16 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.Gson;
@@ -27,9 +36,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.ContainerWorkbench;
 import net.minecraft.server.v1_12_R1.MojangsonParseException;
 import net.minecraft.server.v1_12_R1.MojangsonParser;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.SoundCategory;
+import net.minecraft.server.v1_12_R1.SoundEffect;
+import net.minecraft.server.v1_12_R1.SoundEffectType;
 import net.minecraft.server.v1_12_R1.TileEntity;
 
 public class NBTExample {
@@ -94,9 +107,9 @@ public class NBTExample {
 	}
 
 	public static String getUUID(String name) throws IOException {
-		File file = new File("./uuids/"+name+".json");
+		File file = new File("./uuids/" + name + ".json");
 		file.getParentFile().mkdirs();
-		if(file.exists()) {
+		if (file.exists()) {
 			return FileUtils.readFileToString(file, Charset.defaultCharset());
 		}
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
@@ -112,7 +125,8 @@ public class NBTExample {
 		String result = IOUtils.toString(is, StandardCharsets.UTF_8);
 		if (result.length() > 2) {
 			JsonElement jsone = parse.parse(result).getAsJsonArray().get(0);
-			FileUtils.writeStringToFile(file, jsone.getAsJsonObject().get("id").getAsString(), Charset.defaultCharset());
+			FileUtils.writeStringToFile(file, jsone.getAsJsonObject().get("id").getAsString(),
+					Charset.defaultCharset());
 			return jsone.getAsJsonObject().get("id").getAsString();
 		} else {
 			return null;
@@ -120,10 +134,10 @@ public class NBTExample {
 	}
 
 	public static JsonElement getSkinProfile(String id) throws IOException {
-		File file = new File("./profile/"+id+".json");
+		File file = new File("./profile/" + id + ".json");
 		file.getParentFile().mkdirs();
 		JsonParser parse = new JsonParser();
-		if(file.exists()) {
+		if (file.exists()) {
 			return parse.parse(FileUtils.readFileToString(file, Charset.defaultCharset()));
 		}
 		HttpURLConnection connection = (HttpURLConnection) setupConnection(
@@ -134,7 +148,7 @@ public class NBTExample {
 		}
 		InputStream is = connection.getInputStream();
 		String result = IOUtils.toString(is, StandardCharsets.UTF_8);
-		FileUtils.writeStringToFile(file, result ,Charset.defaultCharset());
+		FileUtils.writeStringToFile(file, result, Charset.defaultCharset());
 		return parse.parse(result);
 	}
 
@@ -146,5 +160,46 @@ public class NBTExample {
 		connection.setDoInput(true);
 		connection.setDoOutput(true);
 		return connection;
+	}
+
+	@EventHandler
+	public static Location getPosition(CraftItemEvent e) throws Exception {
+		BlockPosition bp = null;
+		if (e.getInventory().getType() == InventoryType.WORKBENCH) {
+			CraftInventoryView inv = (CraftInventoryView) e.getView();
+			bp = (BlockPosition) field.get(inv.getHandle());
+		}
+		return new Location(e.getWhoClicked().getWorld(),bp.getX(),bp.getY(),bp.getZ(),0,0);
+	}
+
+	private static Field field = null;
+	static {
+		try {
+			field = ContainerWorkbench.class.getDeclaredField("h");
+			field.setAccessible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void on(BlockBreakEvent e) {
+		try {
+			Block block = e.getBlock();
+			Location loc = block.getLocation();
+			Method method;
+			method = CraftBlock.class.getDeclaredMethod("getNMSBlock");
+			method.setAccessible(true);
+			net.minecraft.server.v1_12_R1.Block b = (net.minecraft.server.v1_12_R1.Block) method.invoke(block);
+			SoundEffectType soundeffecttype = b.getStepSound();
+			CraftWorld w = (CraftWorld) loc.getWorld();
+			net.minecraft.server.v1_12_R1.World world = w.getHandle();
+			Field field = SoundEffectType.class.getDeclaredField("o");
+			field.setAccessible(true);
+			SoundEffect se = (SoundEffect) field.get(soundeffecttype);
+			world.a(null, loc.getX(), loc.getY(), loc.getZ(), se, SoundCategory.NEUTRAL, soundeffecttype.a(), 0.8f);
+			block.setType(Material.AIR);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 }
