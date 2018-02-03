@@ -19,10 +19,10 @@ public class CommandListener implements CommandExecutor {
 		if (args.length == 0) {
 			return false;
 		}
-		ICMD value = this.plugin.cmds.get(args[0]);
-		if (value == null) {
+		if (this.plugin.cmds.containsKey(args[0])) {
 			return false;
 		}
+		ICMD value = this.plugin.cmds.get(args[0]);
 		return value.onCommand(sender, cmd, label, args);
 	}
 }
