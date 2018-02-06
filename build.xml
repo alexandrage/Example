@@ -1,0 +1,11 @@
+<project name="Example" default="createjar">
+  <property name="projectHome" location="." />
+  <target name="createjar">
+    <jar destfile="C:/Users/zenit/Desktop/1.12.2/plugins/Example.jar" basedir="${projectHome}/bin" >
+    <manifest>
+    	<attribute name="Manifest-Version" value="1.0" />
+    	<attribute name="Built-By" value="alexandrage" />
+    </manifest>
+    </jar>
+  </target>
+</project>

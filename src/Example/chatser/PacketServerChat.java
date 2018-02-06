@@ -11,7 +11,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.gson.Gson;
 
 public class PacketServerChat extends PacketAdapter {
-
+	private static Gson gson = new Gson();
 	public PacketServerChat(Plugin plugin, PacketType[] type) {
 		super(plugin, type);
 	}
@@ -22,13 +22,7 @@ public class PacketServerChat extends PacketAdapter {
 		ChatType ctype = packet.getChatType();
 		if (ctype == ChatType.SYSTEM) {
 			if (wchat != null) {
-				Gson gson = new Gson();
 				BaseComponent bs = gson.fromJson(wchat.getJson(), BaseComponent.class);
-				//System.out.println("---");
-				//System.out.println(bs);
-				//System.out.println("---");
-				//System.out.println(bs.toLegacyText());
-				//System.out.println("---");
 			}
 		}
 	}
