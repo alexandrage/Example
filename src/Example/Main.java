@@ -57,7 +57,6 @@ public class Main extends JavaPlugin {
 		setupChat();
 		setupEconomy();
 		new Packet().hack(this);
-		Bukkit.getLogger().getHandlers();
 		saves = new ChunkConfig(this);
 		ench = new FaceEnchantment(120);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
