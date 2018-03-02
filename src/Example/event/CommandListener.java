@@ -3,6 +3,7 @@ package Example.event;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import Example.Main;
@@ -12,6 +13,10 @@ public class CommandListener implements CommandExecutor {
 
 	public CommandListener(JavaPlugin plugin) {
 		this.plugin = (Main) plugin;
+	}
+
+	public CommandListener(FileConfiguration config) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

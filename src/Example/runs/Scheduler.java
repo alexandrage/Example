@@ -11,6 +11,10 @@ import org.bukkit.util.Vector;
 public class Scheduler extends BukkitRunnable {
 	List<Player> ps;
 
+	public Scheduler() {
+		this.ps = ps;
+	}
+	
 	public Scheduler(List<Player> ps) {
 		this.ps = ps;
 	}

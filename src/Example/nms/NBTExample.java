@@ -1,4 +1,4 @@
-package Example;
+package Example.nms;
 
 import java.io.DataOutputStream;
 import java.io.File;

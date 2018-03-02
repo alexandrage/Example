@@ -11,7 +11,7 @@ public class CustomConfig {
 	private File file;
 	JavaPlugin plugin;
 
-	CustomConfig(JavaPlugin plugin, String name, boolean isResource) {
+	public CustomConfig(JavaPlugin plugin, String name, boolean isResource) {
 		this.plugin = plugin;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
 		this.file.getParentFile().mkdirs();

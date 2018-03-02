@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +21,8 @@ import Example.event.CommandRegister;
 import Example.event.EventListener;
 import Example.event.ICMD;
 import Example.event.Packet;
+import Example.gsoncfg.BanUtils;
+import Example.gsoncfg.Bans;
 import Example.runs.Scheduler;
 import Example.sfg.ChunkConfig;
 import Example.sfg.Configs;
@@ -49,6 +49,15 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		Bans bans =  BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
+		bans.getBan("1.1").getType();
+		bans.getBan("1.1").getReason();
+		bans.getBan("1.2").getType();
+		bans.getBan("1.2").getReason();
+		
+		getServer().getPluginManager().registerEvents(new ListenerExample(this), this);
+		int id = new Scheduler().runTaskTimerAsynchronously(this, 0, 20).getTaskId();
+		Bukkit.getScheduler().cancelTask(id);
 		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
 		new Scheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
 		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
@@ -88,19 +97,6 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		saves.Save();
-	}
-
-	void set(FileConfiguration cfg, Map<String, Integer> map) {
-		cfg.set("keys", map);
-	}
-
-	Map<String, Integer> get(FileConfiguration cfg) {
-		ConfigurationSection cs = this.getConfig().getConfigurationSection("keys");
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (String tmp : cs.getKeys(false)) {
-			map.put(tmp, cs.getInt(tmp));
-		}
-		return map;
 	}
 
 	static {

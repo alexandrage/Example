@@ -154,7 +154,9 @@ public class BaseComponent {
 				sb.append(base.toLegacyText());
 			}
 		}
-		return sb.toString();
+		String result = sb.toString();
+		sb = null;
+		return result;
 	}
 	
 	public String getLegacyText() {
@@ -190,6 +192,8 @@ public class BaseComponent {
 		if (this.text != null) {
 			sb.append(this.text);
 		}
-		return sb.toString();
+		String result = sb.toString();
+		sb = null;
+		return result;
 	}
 }

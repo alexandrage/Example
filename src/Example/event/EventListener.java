@@ -2,24 +2,30 @@ package Example.event;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
+import org.bukkit.SkullType;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.Vector;
+
 import Example.Main;
-import Example.NBTExample;
+import Example.fakechest.Menu;
+import Example.nms.NBTExample;
 import Example.runs.ArmorStandScheduler;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 public class EventListener implements Listener {
 	private Main plugin;
@@ -33,27 +39,47 @@ public class EventListener implements Listener {
 		Location loc = NBTExample.getPosition(e);
 		System.out.println(loc.getX() + " " + loc.getY() + " " + loc.getZ());
 	}
-	
+
+	@EventHandler
+	public void on(PlayerInteractEvent e) {
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+		SkullMeta meta = (SkullMeta) head.getItemMeta();
+		meta.setOwningPlayer(e.getPlayer());
+		head.setItemMeta(meta);
+		
+		List<ItemStack> stack = new ArrayList<ItemStack>();
+		stack.add(head);
+		
+		Menu m = new Menu(stack, "Skull");
+		e.getPlayer().openInventory(m.getInventory());
+	}
+	/*
+	 * @EventHandler public void on(PlayerInteractEvent e) { Block block =
+	 * e.getClickedBlock(); if(block.getType()==Material.CHEST) { Location loc =
+	 * block.getLocation().add(new Vector(0,1,0)); Block bl = loc.getBlock();
+	 * bl.setType(Material.CHEST); Chest chest1 = (Chest) block.getState();
+	 * Chest chest2 = (Chest) bl.getState();
+	 * chest2.getSnapshotInventory().setContents(chest1.getSnapshotInventory().
+	 * getContents()); chest2.update(); } }
+	 */
+
 	@EventHandler
 	public void on(BlockDispenseEvent e) {
 		System.out.println(e.getItem());
 		System.out.println(e.getBlock());
 	}
-	
+
 	@EventHandler
 	public void on(PlayerJoinEvent e) {
 		this.plugin.ps.add(e.getPlayer());
-		String s = PlaceholderAPI.setBracketPlaceholders(e.getPlayer(), "%player_name%");
-		e.setJoinMessage(s);
 	}
 
 	@EventHandler
 	public void on(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
-		p.sendMessage(this.plugin.tick.getPlayerTime(p)+"");
-		
+		p.sendMessage(this.plugin.tick.getPlayerTime(p) + "");
 	}
-	
+
 	@EventHandler
 	public void on(ServerCommandEvent e) {
 
