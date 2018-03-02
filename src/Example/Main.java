@@ -50,14 +50,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		Bans bans =  BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
-		bans.getBan("1.1").getType();
-		bans.getBan("1.1").getReason();
-		bans.getBan("1.2").getType();
-		bans.getBan("1.2").getReason();
-		
 		getServer().getPluginManager().registerEvents(new ListenerExample(this), this);
-		int id = new Scheduler().runTaskTimerAsynchronously(this, 0, 20).getTaskId();
-		Bukkit.getScheduler().cancelTask(id);
 		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
 		new Scheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
 		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
