@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Scheduler extends BukkitRunnable {
+public class PScheduler extends BukkitRunnable {
 	List<Player> ps;
 	
-	public Scheduler(List<Player> ps) {
+	public PScheduler(List<Player> ps) {
 		this.ps = ps;
 	}
 

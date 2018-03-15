@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ import Example.event.ICMD;
 import Example.event.Packet;
 import Example.gsoncfg.BanUtils;
 import Example.gsoncfg.Bans;
-import Example.runs.Scheduler;
+import Example.runs.PScheduler;
 import Example.sfg.ChunkConfig;
 import Example.sfg.Configs;
 import Example.sfg.CustomConfig;
@@ -46,13 +45,15 @@ public class Main extends JavaPlugin {
 	public List<Player> ps = new ArrayList<Player>();
 	public ITickEvent tick;
 	public Map<String, ICMD> cmds = new HashMap<String, ICMD>();
+	public Configs cmd;
 
 	@Override
 	public void onEnable() {
+		cmd = new Configs();
 		Bans bans =  BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
 		getServer().getPluginManager().registerEvents(new ListenerExample(this), this);
 		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
-		new Scheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
+		new PScheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
 		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
 		setupChat();
 		setupEconomy();

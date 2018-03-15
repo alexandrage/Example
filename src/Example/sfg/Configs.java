@@ -20,4 +20,15 @@ public class Configs {
 		CustomConfig custom = new CustomConfig(plugin, name, isResource);
 		sfg.put(name, custom);
 	}
+
+	public void remove(String name) {
+		if (contains(name)) {
+			sfg.get(name).saveCfg();
+			sfg.remove(name);
+		}
+	}
+
+	public boolean contains(String name) {
+		return sfg.containsKey(name);
+	}
 }

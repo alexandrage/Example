@@ -51,7 +51,7 @@ public class EventListener implements Listener {
 		stack.add(head);
 		
 		Menu m = new Menu(stack, "Skull");
-		e.getPlayer().openInventory(m.getInventory());
+		//e.getPlayer().openInventory(m.getInventory());
 	}
 	/*
 	 * @EventHandler public void on(PlayerInteractEvent e) { Block block =
