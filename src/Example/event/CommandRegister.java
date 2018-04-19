@@ -14,14 +14,11 @@ import org.bukkit.plugin.Plugin;
 public class CommandRegister extends Command implements PluginIdentifiableCommand {
 	protected Plugin plugin;
 	protected final CommandExecutor owner;
-	protected final Object registeredWith;
 
-	public CommandRegister(String[] aliases, String desc, String usage, CommandExecutor owner, Object registeredWith,
-			Plugin plugin2) {
+	public CommandRegister(String[] aliases, String desc, String usage, CommandExecutor owner, Plugin plugin) {
 		super(aliases[0], desc, usage, Arrays.asList(aliases));
 		this.owner = owner;
-		this.plugin = plugin2;
-		this.registeredWith = registeredWith;
+		this.plugin = plugin;
 	}
 
 	@Override
@@ -34,13 +31,9 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 		return this.owner.onCommand(sender, this, label, args);
 	}
 
-	public Object getRegisteredWith() {
-		return this.registeredWith;
-	}
-
 	public static void reg(Plugin plugin, CommandExecutor cxecutor, String[] aliases, String desc, String usage) {
 		try {
-			CommandRegister reg = new CommandRegister(aliases, desc, usage, cxecutor, new Object(), plugin);
+			CommandRegister reg = new CommandRegister(aliases, desc, usage, cxecutor, plugin);
 			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			field.setAccessible(true);
 			CommandMap map = (CommandMap) field.get(Bukkit.getServer());

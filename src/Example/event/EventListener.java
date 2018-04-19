@@ -1,10 +1,15 @@
 package Example.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -13,25 +18,53 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Vector;
 
+import com.sk89q.minecraft.util.commands.CommandException;
+
+import Example.Example;
 import Example.Main;
+import Example.wg;
 import Example.fakechest.Menu;
 import Example.nms.NBTExample;
+import Example.node.Data;
+import Example.node.Node;
+import Example.node.NodeUtils;
+import Example.node.SkillData;
+import Example.node.SkillGui;
 import Example.runs.ArmorStandScheduler;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class EventListener implements Listener {
 	private Main plugin;
 
 	public EventListener(Main plugin) {
 		this.plugin = plugin;
+	}
+
+	@EventHandler
+	public void on(PlayerCommandPreprocessEvent e) {
+		// TODO test.
+		Map<String, SkillData> skill = new HashMap<String, SkillData>();
+		NodeUtils.skills.put(e.getPlayer(), skill);
+		NodeUtils.setupGui(e.getPlayer());
+	}
+
+	@EventHandler
+	public void on(InventoryClickEvent e) {
+		NodeUtils.clickAction(e);
 	}
 
 	@EventHandler
@@ -42,16 +75,26 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerInteractEvent e) {
-		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
-		SkullMeta meta = (SkullMeta) head.getItemMeta();
-		meta.setOwningPlayer(e.getPlayer());
-		head.setItemMeta(meta);
-		
-		List<ItemStack> stack = new ArrayList<ItemStack>();
-		stack.add(head);
-		
-		Menu m = new Menu(stack, "Skull");
-		//e.getPlayer().openInventory(m.getInventory());
+		Player player = e.getPlayer();
+		Location ploc = player.getLocation().clone().add(new Vector(0, 2, 0));
+		// try {
+		// wg.test(e.getPlayer(), e.getPlayer().getWorld());
+		// } catch (CommandException e1) {
+		// e1.printStackTrace();
+		// }
+		// e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
+		// TextComponent.fromLegacyText("text"));
+		// ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)
+		// SkullType.PLAYER.ordinal());
+		// SkullMeta meta = (SkullMeta) head.getItemMeta();
+		// meta.setOwningPlayer(e.getPlayer());
+		// head.setItemMeta(meta);
+
+		// List<ItemStack> stack = new ArrayList<ItemStack>();
+		// stack.add(head);
+
+		// Menu m = new Menu(stack, "Skull");
+		// e.getPlayer().openInventory(m.getInventory());
 	}
 	/*
 	 * @EventHandler public void on(PlayerInteractEvent e) { Block block =
@@ -62,23 +105,6 @@ public class EventListener implements Listener {
 	 * chest2.getSnapshotInventory().setContents(chest1.getSnapshotInventory().
 	 * getContents()); chest2.update(); } }
 	 */
-
-	@EventHandler
-	public void on(BlockDispenseEvent e) {
-		System.out.println(e.getItem());
-		System.out.println(e.getBlock());
-	}
-
-	@EventHandler
-	public void on(PlayerJoinEvent e) {
-		this.plugin.ps.add(e.getPlayer());
-	}
-
-	@EventHandler
-	public void on(AsyncPlayerChatEvent e) {
-		Player p = e.getPlayer();
-		p.sendMessage(this.plugin.tick.getPlayerTime(p) + "");
-	}
 
 	@EventHandler
 	public void on(ServerCommandEvent e) {

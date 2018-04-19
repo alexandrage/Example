@@ -200,4 +200,22 @@ public class Example {
 		}
 		return lastBlock;
 	}
+
+	public static boolean isInteger(String s) {
+		if (s.startsWith("-")) {
+			s = s.substring(1);
+		}
+		if (s.length() > 10) {
+			return false;
+		}
+		for (int i = 0; i < s.length(); i++) {
+			if (Character.digit(s.charAt(i), 10) < 0) {
+				return false;
+			}
+		}
+		if (s.length() == 10) {
+			return Long.parseLong(s) <= Integer.MAX_VALUE;
+		}
+		return true;
+	}
 }

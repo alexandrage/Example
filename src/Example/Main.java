@@ -45,13 +45,10 @@ public class Main extends JavaPlugin {
 	public List<Player> ps = new ArrayList<Player>();
 	public ITickEvent tick;
 	public Map<String, ICMD> cmds = new HashMap<String, ICMD>();
-	public Configs cmd;
-
+	
 	@Override
 	public void onEnable() {
-		cmd = new Configs();
 		Bans bans =  BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
-		getServer().getPluginManager().registerEvents(new ListenerExample(this), this);
 		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
 		new PScheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
 		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");

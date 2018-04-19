@@ -1,5 +1,6 @@
 package Example;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -118,5 +120,31 @@ public class wg {
 			affected = editSession.replaceBlocks(region, from, to);
 		}
 		player.print(affected + " block(s) have been replaced.");
+	}
+
+	public static void test(Player player, World world) throws CommandException {
+		RegionManager manager = checkRegionManager(wg, world);
+		Map<String, ProtectedRegion> regions = manager.getRegions();
+		for (String id : regions.keySet()) {
+			ProtectedRegion region = regions.get(id);
+			DefaultDomain owners = region.getOwners();
+			System.out.println("uuid " + owners.contains(player.getUniqueId()));
+			System.out.println("name " + owners.contains(player.getName()));
+		}
+	}
+
+	protected static RegionManager checkRegionManager(WorldGuardPlugin plugin, World world) throws CommandException {
+		if (!plugin.getGlobalStateManager().get(world).useRegions) {
+			throw new CommandException("Region support is disabled in the target world. "
+					+ "It can be enabled per-world in WorldGuard's configuration files. "
+					+ "However, you may need to restart your server afterwards.");
+		}
+
+		RegionManager manager = plugin.getRegionContainer().get(world);
+		if (manager == null) {
+			throw new CommandException("Region data failed to load for this world. "
+					+ "Please ask a server administrator to read the logs to identify the reason.");
+		}
+		return manager;
 	}
 }

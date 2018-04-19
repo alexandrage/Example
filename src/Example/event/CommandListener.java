@@ -15,10 +15,6 @@ public class CommandListener implements CommandExecutor {
 		this.plugin = (Main) plugin;
 	}
 
-	public CommandListener(FileConfiguration config) {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
