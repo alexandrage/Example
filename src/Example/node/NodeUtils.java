@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class NodeUtils {
 	public static Map<Player, Map<String, SkillData>> skills = new HashMap<Player, Map<String, SkillData>>();
