@@ -36,7 +36,7 @@ public class Configs {
 	public void saveAll() {
 		for (Entry<String, CustomConfig> s : sfg.entrySet()) {
 			sfg.get(s.getKey()).saveCfg();
-			sfg.remove(s);
+			sfg.remove(s.getKey());
 		}
 	}
 }
