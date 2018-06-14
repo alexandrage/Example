@@ -12,7 +12,7 @@ public class SQLite {
 	static Statement statmt;
 	static PreparedStatement preparedStatement = null;
 
-	SQLite(String url) {
+	public SQLite(String url) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite://" + url);

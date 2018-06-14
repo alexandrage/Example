@@ -121,9 +121,9 @@ public class NBTExample {
 		writer.flush();
 		writer.close();
 		InputStream is = connection.getInputStream();
-		JsonParser parse = new JsonParser();
 		String result = IOUtils.toString(is, StandardCharsets.UTF_8);
 		if (result.length() > 2) {
+			JsonParser parse = new JsonParser();
 			JsonElement jsone = parse.parse(result).getAsJsonArray().get(0);
 			FileUtils.writeStringToFile(file, jsone.getAsJsonObject().get("id").getAsString(),
 					Charset.defaultCharset());
@@ -169,7 +169,7 @@ public class NBTExample {
 			CraftInventoryView inv = (CraftInventoryView) e.getView();
 			bp = (BlockPosition) field.get(inv.getHandle());
 		}
-		return new Location(e.getWhoClicked().getWorld(),bp.getX(),bp.getY(),bp.getZ(),0,0);
+		return new Location(e.getWhoClicked().getWorld(), bp.getX(), bp.getY(), bp.getZ(), 0, 0);
 	}
 
 	private static Field field = null;
@@ -186,8 +186,7 @@ public class NBTExample {
 		try {
 			Block block = e.getBlock();
 			Location loc = block.getLocation();
-			Method method;
-			method = CraftBlock.class.getDeclaredMethod("getNMSBlock");
+			Method method = CraftBlock.class.getDeclaredMethod("getNMSBlock");
 			method.setAccessible(true);
 			net.minecraft.server.v1_12_R1.Block b = (net.minecraft.server.v1_12_R1.Block) method.invoke(block);
 			SoundEffectType soundeffecttype = b.getStepSound();

@@ -1,8 +1,8 @@
 <project name="Example">
-	<jar destfile="${user.home}/Desktop/1.12.2/plugins/Example.jar" basedir="./bin">
-		<manifest>
-			<attribute name="Manifest-Version" value="1.0"/>
-			<attribute name="Built-By" value="alexandrage"/>
-		</manifest>
-	</jar>
+    <jar destfile="${user.home}/Desktop/1.12.2/plugins/Example.jar" basedir="./bin">
+    <manifest>
+        <attribute name="Manifest-Version" value="1.0" />
+        <attribute name="Built-By" value="alexandrage" />
+    </manifest>
+    </jar>
 </project>

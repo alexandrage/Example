@@ -1,4 +1,4 @@
 name: example
 main: Example.Main
 version: 1.0
-depend: [ProtocolLib]
+depend: [ProtocolLib,FastAsyncWorldEdit]

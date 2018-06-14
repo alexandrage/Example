@@ -2,6 +2,7 @@ package Example.sfg;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,5 +31,12 @@ public class Configs {
 
 	public boolean contains(String name) {
 		return sfg.containsKey(name);
+	}
+
+	public void saveAll() {
+		for (Entry<String, CustomConfig> s : sfg.entrySet()) {
+			sfg.get(s.getKey()).saveCfg();
+			sfg.remove(s);
+		}
 	}
 }

@@ -122,17 +122,6 @@ public class wg {
 		player.print(affected + " block(s) have been replaced.");
 	}
 
-	public static void test(Player player, World world) throws CommandException {
-		RegionManager manager = checkRegionManager(wg, world);
-		Map<String, ProtectedRegion> regions = manager.getRegions();
-		for (String id : regions.keySet()) {
-			ProtectedRegion region = regions.get(id);
-			DefaultDomain owners = region.getOwners();
-			System.out.println("uuid " + owners.contains(player.getUniqueId()));
-			System.out.println("name " + owners.contains(player.getName()));
-		}
-	}
-
 	protected static RegionManager checkRegionManager(WorldGuardPlugin plugin, World world) throws CommandException {
 		if (!plugin.getGlobalStateManager().get(world).useRegions) {
 			throw new CommandException("Region support is disabled in the target world. "
@@ -146,5 +135,25 @@ public class wg {
 					+ "Please ask a server administrator to read the logs to identify the reason.");
 		}
 		return manager;
+	}
+
+	public static void claim(World world, Player player, String id) throws CommandException {
+		RegionManager manager = checkRegionManager(wg, world);
+		ProtectedRegion region = checkRegionFromSelection(player, id);
+		if ((region instanceof ProtectedPolygonalRegion)) {
+			throw new CommandException("Полигоны в настоящее время не поддерживаются для /rg claim.");
+		}
+		manager.addRegion(region);
+	}
+
+	public static void test(Player player, World world) throws CommandException {
+		RegionManager manager = checkRegionManager(wg, world);
+		Map<String, ProtectedRegion> regions = manager.getRegions();
+		for (String id : regions.keySet()) {
+			ProtectedRegion region = regions.get(id);
+			DefaultDomain owners = region.getOwners();
+			System.out.println("uuid " + owners.contains(player.getUniqueId()));
+			System.out.println("name " + owners.contains(player.getName()));
+		}
 	}
 }

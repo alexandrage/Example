@@ -7,15 +7,17 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class H2 {
+public class MySQL {
 	static Connection conn;
 	static Statement statmt;
 	static PreparedStatement preparedStatement = null;
 
-	public H2(String url) {
+	public MySQL(String url, String dbName, String user, String pass) {
 		try {
-			Class.forName("org.h2.Driver");
-			conn = DriverManager.getConnection("jdbc:h2://" + url + ";mode=MySQL", "sa", "");
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(
+					"jdbc:mysql://" + url + "/" + dbName + "?useUnicode=true&characterEncoding=utf8&autoReconnect=true",
+					user, pass);
 			statmt = conn.createStatement();
 			statmt.execute(
 					"CREATE TABLE IF NOT EXISTS `users` (`user` varchar(255) PRIMARY KEY,`time` varchar(255) NOT NULL)");

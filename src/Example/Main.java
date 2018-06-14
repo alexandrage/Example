@@ -1,37 +1,35 @@
 package Example;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import Example.chest.Menu;
 import Example.ench.FaceEnchantment;
-import Example.event.CMDReload;
 import Example.event.CommandListener;
 import Example.event.CommandRegister;
 import Example.event.EventListener;
-import Example.event.ICMD;
 import Example.event.Packet;
 import Example.gsoncfg.BanUtils;
 import Example.gsoncfg.Bans;
 import Example.runs.PScheduler;
 import Example.sfg.ChunkConfig;
 import Example.sfg.Configs;
-import Example.sfg.CustomConfig;
 import Example.sfg.MapSer;
 import Example.sfg.StackList;
 import net.ess3.api.IEssentials;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import tick.ITickEvent;
 
 public class Main extends JavaPlugin {
 	public static Chat chat = null;
@@ -43,13 +41,19 @@ public class Main extends JavaPlugin {
 	public ChunkConfig saves;
 	public IEssentials ess = null;
 	public List<Player> ps = new ArrayList<Player>();
-	public ITickEvent tick;
-	public Map<String, ICMD> cmds = new HashMap<String, ICMD>();
-	
+	public FaceWorkbench fw;
+
 	@Override
 	public void onEnable() {
-		Bans bans =  BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
-		tick = (ITickEvent) getServer().getPluginManager().getPlugin("TickEvent");
+		// new Scheduler(this).runTaskTimer(this, 10, 10);
+		new EventListener(this);
+		fw = new FaceWorkbench(this);
+		cfgs = new Configs();
+		// shd = new Scheduler(this);
+		// shd.runTaskTimer(this, 20, 20);
+		Bans bans = BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
+		// tick = (ITickEvent)
+		// getServer().getPluginManager().getPlugin("TickEvent");
 		new PScheduler(ps).runTaskTimerAsynchronously(this, 20, 20);
 		ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
 		setupChat();
@@ -59,23 +63,6 @@ public class Main extends JavaPlugin {
 		ench = new FaceEnchantment(120);
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		cfgs = new Configs();
-		cfgs.add(this, "stack", true);
-		CustomConfig cfg = cfgs.get("stack");
-		stl = new StackList(cfg.getCfg());
-		menu = new Menu(this.stl, "gui");
-		cfgs.add(this, "name1", false);
-		cfgs.add(this, "name2", false);
-		CustomConfig cfg1 = cfgs.get("name1");
-		if (!cfg1.getCfg().contains("name1")) {
-			cfg1.getCfg().set("name1", "value1");
-			cfg1.saveCfg();
-		}
-		CustomConfig cfg2 = cfgs.get("name2");
-		if (!cfg1.getCfg().contains("name2")) {
-			cfg2.getCfg().set("name2", "value2");
-			cfg2.saveCfg();
-		}
-		cmds.put("reload", new CMDReload(this));
 		CommandRegister.reg(this, new CommandListener(this), new String[] { "example", "ex" }, "example",
 				"/example reload");
 		ItemStack stack = new ItemStack(Material.STONE);
@@ -86,6 +73,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		cfgs.saveAll();
 		saves.Save();
 	}
 

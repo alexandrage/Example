@@ -218,4 +218,19 @@ public class Example {
 		}
 		return true;
 	}
+
+	public static String pluralForm(long i, String form1, String form2, String form5) {
+		i = i % 100;
+		long n1 = i % 10;
+		if (i > 10 && i < 20) {
+			return form5;
+		}
+		if (n1 > 1 && n1 < 5) {
+			return form2;
+		}
+		if (n1 == 1) {
+			return form1;
+		}
+		return form5;
+	}
 }

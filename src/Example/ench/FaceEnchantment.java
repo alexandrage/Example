@@ -1,3 +1,4 @@
+
 package Example.ench;
 
 import java.lang.reflect.Field;
@@ -55,21 +56,12 @@ public class FaceEnchantment extends Enchantment {
 
 	private void fix(FaceEnchantment ench) {
 		try {
-			try {
-				Field f = Enchantment.class.getDeclaredField("acceptingNew");
-				f.setAccessible(true);
-				f.set(null, true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				Enchantment.registerEnchantment(ench);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
+			Field f = Enchantment.class.getDeclaredField("acceptingNew");
+			f.setAccessible(true);
+			f.set(null, true);
+			Enchantment.registerEnchantment(ench);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }
