@@ -23,6 +23,7 @@ import Example.event.Packet;
 import Example.gsoncfg.BanUtils;
 import Example.gsoncfg.Bans;
 import Example.runs.PScheduler;
+import Example.runs.Scheduler;
 import Example.sfg.ChunkConfig;
 import Example.sfg.Configs;
 import Example.sfg.MapSer;
@@ -49,8 +50,8 @@ public class Main extends JavaPlugin {
 		new EventListener(this);
 		fw = new FaceWorkbench(this);
 		cfgs = new Configs();
-		// shd = new Scheduler(this);
-		// shd.runTaskTimer(this, 20, 20);
+		Scheduler shd = new Scheduler();
+		shd.runTaskTimer(this, 1, 1);
 		Bans bans = BanUtils.setBans(this.getDataFolder().getAbsolutePath(), "ban.json");
 		// tick = (ITickEvent)
 		// getServer().getPluginManager().getPlugin("TickEvent");

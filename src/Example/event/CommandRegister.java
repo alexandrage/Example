@@ -37,7 +37,7 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			field.setAccessible(true);
 			CommandMap map = (CommandMap) field.get(Bukkit.getServer());
-			map.register(plugin.getDescription().getName(), reg);
+			map.register(plugin.getName(), reg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

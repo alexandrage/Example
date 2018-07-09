@@ -1,29 +1,15 @@
 package Example;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Polygonal2DSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.sk89q.worldedit.patterns.Pattern;
-import com.sk89q.worldedit.patterns.SingleBlockPattern;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
@@ -37,9 +23,9 @@ public class wg {
 	protected static WorldGuardPlugin wg = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
 	protected static WorldEditPlugin we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 
-	public static void get(Player player, String id, World world) throws CommandException {
+	public static void claim(Player player, String id, World world) throws CommandException {
 		LocalPlayer localPlayer = wg.wrapPlayer(player);
-		RegionManager manager = wg.getRegionContainer().get(world);
+		RegionManager manager =  checkRegionManager(wg, world);
 		checkRegionDoesNotExist(manager, id, false);
 		checkRegionId(id, false);
 		ApplicableRegionSet regions = manager.getApplicableRegions(checkRegionFromSelection(player, id));
@@ -48,6 +34,14 @@ public class wg {
 				throw new CommandException("Эта область перекрывается с чужой областью.");
 			}
 		}
+		ProtectedRegion region = checkRegionFromSelection(player, id);
+		if ((region instanceof ProtectedPolygonalRegion)) {
+			throw new CommandException("Полигоны в настоящее время не поддерживаются для /rg claim.");
+		}
+		DefaultDomain owners = region.getOwners();
+		owners.addPlayer(localPlayer);
+		region.setOwners(owners);
+		manager.addRegion(region);
 	}
 
 	private static Selection checkSelection(Player player) throws CommandException {
@@ -95,34 +89,7 @@ public class wg {
 		}
 	}
 
-	public void replaceNear(Player p, CommandContext args) throws WorldEditException {
-		com.sk89q.worldedit.entity.Player player = we.wrapPlayer(p);
-		LocalSession session = we.getSession(p);
-		EditSession editSession = we.createEditSession(p);
-		int size = Math.max(1, args.getInteger(0));
-		int affected;
-		Set<BaseBlock> from;
-		Pattern to;
-		if (args.argsLength() == 2) {
-			from = null;
-			to = WorldEdit.getInstance().getBlockPattern(player, args.getString(1));
-		} else {
-			from = WorldEdit.getInstance().getBlocks(player, args.getString(1), true, !args.hasFlag('f'));
-			to = WorldEdit.getInstance().getBlockPattern(player, args.getString(2));
-		}
-		Vector base = session.getPlacementPosition(player);
-		Vector min = base.subtract(size, size, size);
-		Vector max = base.add(size, size, size);
-		Region region = new CuboidRegion(player.getWorld(), min, max);
-		if (to instanceof SingleBlockPattern) {
-			affected = editSession.replaceBlocks(region, from, ((SingleBlockPattern) to).getBlock());
-		} else {
-			affected = editSession.replaceBlocks(region, from, to);
-		}
-		player.print(affected + " block(s) have been replaced.");
-	}
-
-	protected static RegionManager checkRegionManager(WorldGuardPlugin plugin, World world) throws CommandException {
+	private static RegionManager checkRegionManager(WorldGuardPlugin plugin, World world) throws CommandException {
 		if (!plugin.getGlobalStateManager().get(world).useRegions) {
 			throw new CommandException("Region support is disabled in the target world. "
 					+ "It can be enabled per-world in WorldGuard's configuration files. "
@@ -135,25 +102,5 @@ public class wg {
 					+ "Please ask a server administrator to read the logs to identify the reason.");
 		}
 		return manager;
-	}
-
-	public static void claim(World world, Player player, String id) throws CommandException {
-		RegionManager manager = checkRegionManager(wg, world);
-		ProtectedRegion region = checkRegionFromSelection(player, id);
-		if ((region instanceof ProtectedPolygonalRegion)) {
-			throw new CommandException("Полигоны в настоящее время не поддерживаются для /rg claim.");
-		}
-		manager.addRegion(region);
-	}
-
-	public static void test(Player player, World world) throws CommandException {
-		RegionManager manager = checkRegionManager(wg, world);
-		Map<String, ProtectedRegion> regions = manager.getRegions();
-		for (String id : regions.keySet()) {
-			ProtectedRegion region = regions.get(id);
-			DefaultDomain owners = region.getOwners();
-			System.out.println("uuid " + owners.contains(player.getUniqueId()));
-			System.out.println("name " + owners.contains(player.getName()));
-		}
 	}
 }
