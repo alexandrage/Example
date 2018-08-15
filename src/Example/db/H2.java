@@ -8,9 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class H2 {
-	static Connection conn;
-	static Statement statmt;
-	static PreparedStatement preparedStatement = null;
+	private Connection conn;
+	private Statement statmt;
+	private PreparedStatement preparedStatement = null;
 
 	public H2(String url) {
 		try {
@@ -46,6 +46,7 @@ public class H2 {
 			if (e.next()) {
 				item.add(e.getString("user"));
 				item.add(e.getString("time"));
+				e.close();
 				return item;
 			}
 		} catch (Exception e) {
