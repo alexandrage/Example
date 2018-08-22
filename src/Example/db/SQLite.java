@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class SQLite {
+public class SQLite implements Database {
 	private Connection conn;
 	private Statement statmt;
 	private PreparedStatement preparedStatement = null;
@@ -24,6 +24,7 @@ public class SQLite {
 		}
 	}
 
+	@Override
 	public void insert(String user, Long time) {
 		try {
 			PreparedStatement e = conn.prepareStatement("INSERT OR REPLACE INTO users (user,time) VALUES (?,?);");
@@ -35,6 +36,7 @@ public class SQLite {
 		}
 	}
 
+	@Override
 	public ArrayList<String> select(String user) {
 		try {
 			preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE user = ?;");

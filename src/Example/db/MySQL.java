@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class MySQL {
+public class MySQL implements Database {
 	private Connection conn;
 	private Statement statmt;
 	private PreparedStatement preparedStatement = null;
@@ -26,6 +26,7 @@ public class MySQL {
 		}
 	}
 
+	@Override
 	public void insert(String user, Long time) {
 		try {
 			PreparedStatement e = conn
@@ -39,6 +40,7 @@ public class MySQL {
 		}
 	}
 
+	@Override
 	public ArrayList<String> select(String user) {
 		try {
 			preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE user = ?;");
