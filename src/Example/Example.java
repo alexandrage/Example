@@ -1,8 +1,12 @@
 package Example;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Example {
 	public static Location setDirection(Location loc, Location lookat) {
@@ -232,5 +239,29 @@ public class Example {
 			return form1;
 		}
 		return form5;
+	}
+
+	public static String ticksToDate(long ticks) {
+		ticks = ticks - 18000L + 24000L;
+		long days = ticks / 24000L;
+		ticks -= days * 24000L;
+		long hours = ticks / 1000L;
+		ticks -= hours * 1000L;
+		long minutes = (long) Math.floor(ticks / 16.666666666666668D);
+		double dticks = ticks - minutes * 16.666666666666668D;
+		long seconds = (long) Math.floor(dticks / 0.2777777777777778D);
+		Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.ENGLISH);
+		cal.setLenient(true);
+		cal.set(0, 0, 1, 0, 0, 0);
+		cal.add(6, (int) days);
+		cal.add(11, (int) hours);
+		cal.add(12, (int) minutes);
+		cal.add(13, (int) seconds + 1);
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+		return sdf.format(cal.getTime());
+	}
+
+	public static void sendActionBar(Player player, String message) {
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
 	}
 }

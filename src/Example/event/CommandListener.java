@@ -15,9 +15,8 @@ public class CommandListener implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length == 0) {
-			return false;
-		}
-		return false;
+		String s = cmd.getName() + " " + String.join(" ", args);
+		System.out.println(s);
+		return true;
 	}
 }

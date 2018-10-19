@@ -3,6 +3,7 @@ package Example.event;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,27 +11,19 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import com.comphenix.packetwrapper.WrapperPlayServerBlockAction;
 import com.comphenix.protocol.wrappers.BlockPosition;
-
 import Example.Main;
 import Example.nms.NBTExample;
-import Example.node.NodeUtils;
 import Example.runs.ArmorStandScheduler;
-import Example.runs.Scheduler;
 
 public class EventListener implements Listener {
 	private Main plugin;
@@ -40,8 +33,10 @@ public class EventListener implements Listener {
 	}
 
 	@EventHandler
-	public void on(PlayerDeathEvent e) {
-		Player killer = e.getEntity().getKiller();
+	public void on(HangingBreakByEntityEvent e) {
+		if (e.getRemover().getType() == EntityType.PLAYER) {
+			e.setCancelled(true);
+		}
 	}
 
 	@EventHandler
@@ -50,7 +45,7 @@ public class EventListener implements Listener {
 		Location loc = b.getLocation();
 		String block = b.getWorld().getName() + ":" + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ()
 				+ ":" + b.getTypeId() + ":" + b.getData();
-		Scheduler.blocks.put(block, 100l);
+		//Scheduler.blocks.put(block, 100l);
 	}
 
 	private static CommandMap map;
@@ -75,11 +70,6 @@ public class EventListener implements Listener {
 	}
 
 	@EventHandler
-	public void on(InventoryClickEvent e) {
-		NodeUtils.clickAction(e);
-	}
-
-	@EventHandler
 	public void on(CraftItemEvent e) throws Exception {
 		Location loc = NBTExample.getPosition(e);
 		System.out.println(loc.getX() + " " + loc.getY() + " " + loc.getZ());
@@ -99,50 +89,7 @@ public class EventListener implements Listener {
 			player.playSound(loc, Sound.BLOCK_CHEST_CLOSE, 1, i);
 		}
 	}
-
-	/*
-	 * @EventHandler public void on(PlayerInteractEvent e) { Block block =
-	 * e.getClickedBlock(); Player player = e.getPlayer(); if (block.getType()
-	 * == Material.CHEST) { sendBlockAction(block.getLocation(), player, 1);
-	 * e.setCancelled(true); } }
-	 */
-	// Player player = e.getPlayer();
-	// Location ploc = player.getLocation().clone().add(new Vector(0, 2,
-	// 0));
-	// try {
-	// wg.test(e.getPlayer(), e.getPlayer().getWorld());
-	// } catch (CommandException e1) {
-	// e1.printStackTrace();
-	// }
-	// e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
-	// TextComponent.fromLegacyText("text"));
-	// ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)
-	// SkullType.PLAYER.ordinal());
-	// SkullMeta meta = (SkullMeta) head.getItemMeta();
-	// meta.setOwningPlayer(e.getPlayer());
-	// head.setItemMeta(meta);
-
-	// List<ItemStack> stack = new ArrayList<ItemStack>();
-	// stack.add(head);
-
-	// Menu m = new Menu(stack, "Skull");
-	// e.getPlayer().openInventory(m.getInventory());
-	// }
-	/*
-	 * @EventHandler public void on(PlayerInteractEvent e) { Block block =
-	 * e.getClickedBlock(); if(block.getType()==Material.CHEST) { Location loc =
-	 * block.getLocation().add(new Vector(0,1,0)); Block bl = loc.getBlock();
-	 * bl.setType(Material.CHEST); Chest chest1 = (Chest) block.getState();
-	 * Chest chest2 = (Chest) bl.getState();
-	 * chest2.getSnapshotInventory().setContents(chest1.getSnapshotInventory().
-	 * getContents()); chest2.update(); } }
-	 */
-
-	@EventHandler
-	public void on(RemoteServerCommandEvent e) {
-
-	}
-
+	
 	public void runs(Location start) {
 		List<Location> circle = new ArrayList<Location>();
 		for (double t = 0; t < 2 * Math.PI; t += 0.1) {

@@ -8,9 +8,9 @@ import org.bukkit.configuration.serialization.SerializableAs;
 @SerializableAs(value = "MapSer")
 public class MapSer implements ConfigurationSerializable {
 
-	Map<String, Object> map;
+	private Map<String, Object> map;
 
-	MapSer(Map<String, Object> map) {
+	public MapSer(Map<String, Object> map) {
 		this.map = map;
 	}
 

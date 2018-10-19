@@ -169,6 +169,9 @@ public class NBTExample {
 			CraftInventoryView inv = (CraftInventoryView) e.getView();
 			bp = (BlockPosition) field.get(inv.getHandle());
 		}
+		if(bp==null) {
+			return new Location(e.getWhoClicked().getWorld(), 0, 0, 0, 0, 0);
+		}
 		return new Location(e.getWhoClicked().getWorld(), bp.getX(), bp.getY(), bp.getZ(), 0, 0);
 	}
 
