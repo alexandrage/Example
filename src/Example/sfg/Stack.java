@@ -61,8 +61,7 @@ public class Stack {
 		}
 		if (flags != null) {
 			for (String flag : flags) {
-				Set<ItemFlag> f = meta.getItemFlags();
-				f.add(ItemFlag.valueOf(flag));
+				meta.addItemFlags(ItemFlag.valueOf(flag));
 			}
 		}
 		if (unbreak) {
