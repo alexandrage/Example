@@ -9,10 +9,8 @@ public class CustomConfig {
 
 	private YamlConfiguration yml;
 	private File file;
-	JavaPlugin plugin;
 
 	public CustomConfig(JavaPlugin plugin, String name, boolean isResource) {
-		this.plugin = plugin;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
 		this.file.getParentFile().mkdirs();
 		if (!this.file.exists() && isResource) {

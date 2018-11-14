@@ -12,6 +12,13 @@ public class Configs {
 	public CustomConfig get(String name) {
 		return sfg.get(name);
 	}
+	
+	public CustomConfig getLoad(JavaPlugin plugin, String name, boolean isResource) {
+		if(!sfg.containsKey(name)) {
+			this.add(plugin, name, isResource);
+		}
+		return sfg.get(name);
+	}
 
 	public Map<String, CustomConfig> getConfigs() {
 		return sfg;
