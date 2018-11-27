@@ -20,7 +20,7 @@ public class JsonConfig<T> {
 		this.file.getParentFile().mkdirs();
 	}
 
-	public void load() {
+	public JsonConfig<T> load() {
 		String s = "{}";
 		try {
 			s = FileUtils.readFileToString(this.file, Charset.defaultCharset());
@@ -29,6 +29,7 @@ public class JsonConfig<T> {
 		}
 		this.t = (T) gson.fromJson(s, this.t.getClass());
 		this.b = false;
+		return this;
 	}
 
 	public boolean exist() {
