@@ -13,6 +13,10 @@ public class JsonConfig<T> {
 	private Gson gson = new Gson();
 	private T t;
 
+	public static boolean exist(JavaPlugin plugin, String name) {
+		return new File(plugin.getDataFolder(), name + ".yml").exists();
+	}
+
 	public JsonConfig(JavaPlugin plugin, String name, T o) {
 		this.t = o;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
