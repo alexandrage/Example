@@ -12,6 +12,7 @@ public class JsonConfig<T> {
 	private File file;
 	private Gson gson = new Gson();
 	private T t;
+	private Boolean b = true;
 
 	public JsonConfig(JavaPlugin plugin, String name, T o) {
 		this.t = o;
@@ -26,7 +27,8 @@ public class JsonConfig<T> {
 		} catch (IOException e) {
 
 		}
-		t = (T) gson.fromJson(s, this.t.getClass());
+		this.t = (T) gson.fromJson(s, this.t.getClass());
+		this.b = false;
 	}
 
 	public boolean exist() {
@@ -34,8 +36,8 @@ public class JsonConfig<T> {
 	}
 
 	public void save() {
-		if (this.t == null) {
-			throw new IllegalArgumentException("Object cannot be null.");
+		if (this.b) {
+			throw new IllegalArgumentException("Config not loaded. JsonConfig#load()");
 		}
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try {
@@ -46,6 +48,9 @@ public class JsonConfig<T> {
 	}
 
 	public T get() {
+		if (this.b) {
+			throw new IllegalArgumentException("Config not loaded. JsonConfig#load()");
+		}
 		return this.t;
 	}
 
