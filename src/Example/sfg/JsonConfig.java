@@ -14,12 +14,12 @@ public class JsonConfig<T> {
 	private T t;
 
 	public static boolean exist(JavaPlugin plugin, String name) {
-		return new File(plugin.getDataFolder(), name + ".yml").exists();
+		return new File(plugin.getDataFolder(), name + ".json").exists();
 	}
 
 	public JsonConfig(JavaPlugin plugin, String name, T o) {
 		this.t = o;
-		this.file = new File(plugin.getDataFolder(), name + ".yml");
+		this.file = new File(plugin.getDataFolder(), name + ".json");
 		this.file.getParentFile().mkdirs();
 		this.load();
 	}
