@@ -13,8 +13,8 @@ public class JsonConfig<T> {
 	private Gson gson = new Gson();
 	private T t;
 
-	public JsonConfig(JavaPlugin plugin, String name, Object o) {
-		this.t = (T) o;
+	public JsonConfig(JavaPlugin plugin, String name, T o) {
+		this.t = o;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
 		this.file.getParentFile().mkdirs();
 	}
