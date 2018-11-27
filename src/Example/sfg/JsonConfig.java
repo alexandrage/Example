@@ -1,4 +1,4 @@
-package Example.sfg;
+package Example;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,34 +12,25 @@ public class JsonConfig<T> {
 	private File file;
 	private Gson gson = new Gson();
 	private T t;
-	private Boolean b = true;
 
 	public JsonConfig(JavaPlugin plugin, String name, T o) {
 		this.t = o;
 		this.file = new File(plugin.getDataFolder(), name + ".yml");
 		this.file.getParentFile().mkdirs();
+		this.load();
 	}
 
-	public JsonConfig<T> load() {
+	private void load() {
 		String s = "{}";
 		try {
 			s = FileUtils.readFileToString(this.file, Charset.defaultCharset());
 		} catch (IOException e) {
 
 		}
-		this.t = (T) gson.fromJson(s, this.t.getClass());
-		this.b = false;
-		return this;
-	}
-
-	public boolean exist() {
-		return this.file.exists();
+		t = (T) gson.fromJson(s, this.t.getClass());
 	}
 
 	public void save() {
-		if (this.b) {
-			throw new IllegalArgumentException("Config not loaded. JsonConfig#load()");
-		}
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try {
 			FileUtils.writeStringToFile(this.file, gson.toJson(this.t), Charset.defaultCharset());
@@ -49,9 +40,6 @@ public class JsonConfig<T> {
 	}
 
 	public T get() {
-		if (this.b) {
-			throw new IllegalArgumentException("Config not loaded. JsonConfig#load()");
-		}
 		return this.t;
 	}
 
