@@ -35,6 +35,9 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+
+import Example.similar.Similar;
+
 import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -64,32 +67,32 @@ public class Example {
 	}
 
 	public static boolean checkremove(Player p, ItemStack s, int c) {
-		if (calc(p, s) >= c) {
-			clear(p, s, c);
+		if (calc(p, s, Similar.material) >= c) {
+			clear(p, s, c, Similar.material);
 			return true;
 		}
 		return false;
 	}
 
-	public static int calc(Player p, ItemStack s) {
+	public static int calc(Player p, ItemStack s, Similar is) {
 		int count = 0;
 		for (int i = 0; i < p.getInventory().getSize(); i++) {
 			ItemStack stack = p.getInventory().getItem(i);
 			if (stack == null)
 				continue;
-			if (stack.isSimilar(s)) {
+			if (Similar.has(stack, s, is)) {
 				count += stack.getAmount();
 			}
 		}
 		return count;
 	}
 
-	public static void clear(Player p, ItemStack s, int c) {
+	public static void clear(Player p, ItemStack s, int c, Similar is) {
 		for (int i = 0; i < p.getInventory().getSize(); i++) {
 			ItemStack stack = p.getInventory().getItem(i);
 			if (stack == null)
 				continue;
-			if (stack.isSimilar(s)) {
+			if (Similar.has(stack, s, is)) {
 				if (stack.getAmount() == 0)
 					break;
 				if (stack.getAmount() <= c) {
@@ -190,7 +193,7 @@ public class Example {
 		rc.shape("012", "345", "678");
 		for (int i = 0; i < 9; i++) {
 			if (istack[i] != null && istack[i].getType() != Material.AIR)
-				rc.setIngredient(String.valueOf(i).toCharArray()[0], istack[i].getType());
+				rc.setIngredient(Character.forDigit(i, 10), istack[i].getType());
 		}
 		Bukkit.getServer().addRecipe(rc);
 	}
