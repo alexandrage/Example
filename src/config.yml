@@ -1,0 +1,3 @@
+cmd:
+- lp user %user% meta removeprefix 100
+- lp user %user% meta addprefix 100 %cmd%

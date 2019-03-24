@@ -20,10 +20,12 @@ import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -35,15 +37,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.ContainerWorkbench;
-import net.minecraft.server.v1_12_R1.MojangsonParseException;
-import net.minecraft.server.v1_12_R1.MojangsonParser;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.SoundCategory;
-import net.minecraft.server.v1_12_R1.SoundEffect;
-import net.minecraft.server.v1_12_R1.SoundEffectType;
-import net.minecraft.server.v1_12_R1.TileEntity;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.ContainerWorkbench;
+import net.minecraft.server.v1_13_R2.Item;
+import net.minecraft.server.v1_13_R2.ItemCooldown;
+import net.minecraft.server.v1_13_R2.MojangsonParser;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.SoundCategory;
+import net.minecraft.server.v1_13_R2.SoundEffect;
+import net.minecraft.server.v1_13_R2.SoundEffectType;
+import net.minecraft.server.v1_13_R2.TileEntity;
 
 public class NBTExample {
 
@@ -53,7 +56,7 @@ public class NBTExample {
 			String uuid = getUUID(name);
 			try {
 				tag = MojangsonParser.parse(nbt(getSkinProfile(uuid)));
-			} catch (MojangsonParseException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} catch (IOException e) {
@@ -62,7 +65,7 @@ public class NBTExample {
 		NBTTagCompound nbt = new NBTTagCompound();
 		CraftItemStack.asNMSCopy(item).save(nbt);
 		nbt.set("tag", tag);
-		return CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_12_R1.ItemStack(nbt));
+		return CraftItemStack.asBukkitCopy(net.minecraft.server.v1_13_R2.ItemStack.a(nbt));
 	}
 
 	public static void setSkullSkin(Block block, Location loc, String name) {
@@ -72,8 +75,7 @@ public class NBTExample {
 			TileEntity tile = cw.getHandle().getTileEntity(new BlockPosition(loc.getX(), loc.getY(), loc.getZ()));
 			NBTTagCompound NBT = new NBTTagCompound();
 			tile.save(NBT);
-			NBT = MojangsonParser.parse(nbt(getSkinProfile(uuid), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
-					NBT.get("Rot").toString()));
+			NBT = MojangsonParser.parse(nbt(getSkinProfile(uuid), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 			tile.load(NBT);
 			block.getState().update();
 		} catch (Exception e) {
@@ -93,7 +95,7 @@ public class NBTExample {
 		return tmp;
 	}
 
-	private static String nbt(JsonElement jsone, int x, int y, int z, String rot) {
+	private static String nbt(JsonElement jsone, int x, int y, int z) {
 		JsonElement prop = jsone.getAsJsonObject().get("properties");
 		JsonObject json = prop.getAsJsonArray().get(0).getAsJsonObject();
 		String id = jsone.getAsJsonObject().get("id").getAsString();
@@ -101,8 +103,8 @@ public class NBTExample {
 		String value = json.get("value").toString();
 		BigInteger b = new BigInteger(id, 16);
 		String tmp = "{Owner:{Id:\"" + new UUID(b.shiftRight(64).longValue(), b.longValue())
-				+ "\",Properties:{textures:[{Value:" + value + "}]},Name:" + name + "}" + ",Rot:" + rot + ",x:" + x
-				+ ",y:" + y + ",z:" + z + ",id:\"minecraft:skull\",SkullType:3b}";
+				+ "\",Properties:{textures:[{Value:" + value + "}]},Name:" + name + "}" + ",x:" + x + ",y:" + y + ",z:"
+				+ z + ",id:\"minecraft:skull\"}";
 		return tmp;
 	}
 
@@ -169,7 +171,7 @@ public class NBTExample {
 			CraftInventoryView inv = (CraftInventoryView) e.getView();
 			bp = (BlockPosition) field.get(inv.getHandle());
 		}
-		if(bp==null) {
+		if (bp == null) {
 			return new Location(e.getWhoClicked().getWorld(), 0, 0, 0, 0, 0);
 		}
 		return new Location(e.getWhoClicked().getWorld(), bp.getX(), bp.getY(), bp.getZ(), 0, 0);
@@ -191,10 +193,10 @@ public class NBTExample {
 			Location loc = block.getLocation();
 			Method method = CraftBlock.class.getDeclaredMethod("getNMSBlock");
 			method.setAccessible(true);
-			net.minecraft.server.v1_12_R1.Block b = (net.minecraft.server.v1_12_R1.Block) method.invoke(block);
+			net.minecraft.server.v1_13_R2.Block b = (net.minecraft.server.v1_13_R2.Block) method.invoke(block);
 			SoundEffectType soundeffecttype = b.getStepSound();
 			CraftWorld w = (CraftWorld) loc.getWorld();
-			net.minecraft.server.v1_12_R1.World world = w.getHandle();
+			net.minecraft.server.v1_13_R2.World world = w.getHandle();
 			Field field = SoundEffectType.class.getDeclaredField("o");
 			field.setAccessible(true);
 			SoundEffect se = (SoundEffect) field.get(soundeffecttype);
@@ -203,5 +205,17 @@ public class NBTExample {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	public boolean isCooldown(Player player, ItemStack stack, int time) {
+		net.minecraft.server.v1_13_R2.ItemStack cstack = CraftItemStack.asNMSCopy(stack);
+		Item item = cstack.getItem();
+		CraftPlayer cp = (CraftPlayer) player;
+		ItemCooldown itemCooldown = cp.getHandle().getCooldownTracker();
+		boolean bool = itemCooldown.a(item);
+		if (!bool) {
+			itemCooldown.a(item, time);
+		}
+		return bool;
 	}
 }

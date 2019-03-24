@@ -1,6 +1,7 @@
 package Example.similar;
 
 import java.util.List;
+
 import org.bukkit.inventory.ItemStack;
 
 public class LoreSimilar implements ISimilar {

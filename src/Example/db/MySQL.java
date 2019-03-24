@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-public class MySQL implements Database {
+public class MySQL {
 	private Connection conn;
+	private Statement statmt;
+	private PreparedStatement preparedStatement = null;
 
 	public MySQL(String url, String dbName, String user, String pass) {
 		try {
@@ -15,37 +18,42 @@ public class MySQL implements Database {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://" + url + "/" + dbName + "?useUnicode=true&characterEncoding=utf8&autoReconnect=true",
 					user, pass);
-			conn.createStatement().execute(
-					"CREATE TABLE IF NOT EXISTS `users` (`user` varchar(16) PRIMARY KEY,`time` varchar(255) NOT NULL)");
+			statmt = conn.createStatement();
+			statmt.execute(
+					"CREATE TABLE IF NOT EXISTS `users` (`user` varchar(16) PRIMARY KEY,`pass` varchar(32) NOT NULL,`ip` varchar(16) NOT NULL,`time` varchar(32) NOT NULL)");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void insert(String user, Long time) {
+	public void insert(String user, String pass, String ip, Long time) {
 		try {
-			PreparedStatement e = conn
-					.prepareStatement("INSERT INTO users (user,time) VALUES (?,?) ON DUPLICATE KEY UPDATE time = ?;");
+			PreparedStatement e = conn.prepareStatement(
+					"INSERT INTO users (user,pass,ip,time) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE pass = ?, ip = ?, time = ?;");
 			e.setString(1, user);
-			e.setLong(2, time);
-			e.setLong(3, time);
+			e.setString(2, pass);
+			e.setString(3, ip);
+			e.setLong(4, time);
+			e.setString(5, pass);
+			e.setString(6, ip);
+			e.setLong(7, time);
 			e.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
 	public ArrayList<String> select(String user) {
 		try {
-			PreparedStatement e = conn.prepareStatement("SELECT * FROM users WHERE user = ?;");
-			e.setString(1, user);
-			ResultSet r = e.executeQuery();
+			preparedStatement = conn.prepareStatement("SELECT user,pass,ip,time FROM users WHERE user = ?;");
+			preparedStatement.setString(1, user);
+			ResultSet e = preparedStatement.executeQuery();
 			ArrayList<String> item = new ArrayList<String>();
-			if (r.next()) {
-				item.add(r.getString("user"));
-				item.add(r.getString("time"));
+			if (e.next()) {
+				item.add(e.getString("user"));
+				item.add(e.getString("pass"));
+				item.add(e.getString("ip"));
+				item.add(e.getString("time"));
 				e.close();
 				return item;
 			}

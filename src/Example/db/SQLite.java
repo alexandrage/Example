@@ -4,16 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLite implements Database {
 	private Connection conn;
+	private Statement statmt;
+	private PreparedStatement preparedStatement = null;
 
 	public SQLite(String url) {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite://" + url);
-			conn.createStatement().execute(
+			statmt = conn.createStatement();
+			statmt.execute(
 					"CREATE TABLE IF NOT EXISTS `users` (`user` varchar(16) PRIMARY KEY,`time` varchar(255) NOT NULL)");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,13 +39,13 @@ public class SQLite implements Database {
 	@Override
 	public ArrayList<String> select(String user) {
 		try {
-			PreparedStatement e = conn.prepareStatement("SELECT * FROM users WHERE user = ?;");
-			e.setString(1, user);
-			ResultSet r = e.executeQuery();
+			preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE user = ?;");
+			preparedStatement.setString(1, user);
+			ResultSet e = preparedStatement.executeQuery();
 			ArrayList<String> item = new ArrayList<String>();
-			if (r.next()) {
-				item.add(r.getString("user"));
-				item.add(r.getString("time"));
+			if (e.next()) {
+				item.add(e.getString("user"));
+				item.add(e.getString("time"));
 				e.close();
 				return item;
 			}

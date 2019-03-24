@@ -1,4 +1,6 @@
-name: example
+name: Example
 main: Example.Main
 version: 1.0
-depend: [ProtocolLib,FastAsyncWorldEdit]
+api-version: 1.13
+commands:
+  prefix:

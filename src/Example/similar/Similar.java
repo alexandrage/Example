@@ -17,7 +17,7 @@ public enum Similar {
 	public static boolean has(ItemStack s1, ItemStack s2, Similar... similars) {
 		boolean b = true;
 		for(Similar similar : similars) {
-			if(!similar.isSimilar(s2, s2)) {
+			if(!similar.isSimilar(s1, s2)) {
 				b=false;
 			}
 		}

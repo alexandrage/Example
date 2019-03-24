@@ -10,6 +10,8 @@ st0:
   flags:
   - "HIDE_ATTRIBUTES"
   unbreak: true
+  attribute: 
+  - "GENERIC_ATTACK_DAMAGE 100 HAND"
 st1:
   material: "STONE"
   amount: 20

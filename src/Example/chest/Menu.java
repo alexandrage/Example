@@ -1,40 +1,22 @@
 package Example.chest;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
-import Example.sfg.Stack;
-import Example.sfg.StackList;
+import Example.stack.Stack;
 
 public class Menu implements InventoryHolder {
 
 	private Inventory inventory;
-	private Map<Integer, Stack> list = new LinkedHashMap<Integer, Stack>();
+	private List<Stack> stack;
 
-	public Menu(StackList stack, String title) {
-		int x = 0;
-		for (Entry<String, Stack> st : stack.getMap().entrySet()) {
-			list.put(x, st.getValue());
-			x++;
-		}
-		this.inventory = Bukkit.createInventory(this, 9 * (int) Math.ceil((double) list.size() / 9), title);
-		for (int i = 0; i < list.size(); i++) {
-			inventory.setItem(i, list.get(i).getStack());
-		}
-	}
-
-	public Menu(List<ItemStack> stack, String title) {
-		this.inventory = Bukkit.createInventory(this, 9 * (int) Math.ceil((double) stack.size() / 9), title);
-		for (int i = 0; i < stack.size(); i++) {
-			inventory.setItem(i, stack.get(i));
-		}
+	public Menu(String title) {
+		this.inventory = Bukkit.createInventory(this, 9, title);
+		this.stack = new ArrayList<Stack>();
 	}
 
 	@Override
@@ -42,13 +24,12 @@ public class Menu implements InventoryHolder {
 		return this.inventory;
 	}
 
-	public Stack getStack(int i) {
-		return list.get(i);
+	public void addItem(Stack stack) {
+		this.inventory.addItem(stack.getStack());
+		this.stack.add(stack);
 	}
 
-	public String getCommand(int i) {
-		if (list.get(i) == null)
-			return null;
-		return list.get(i).getCommand();
+	public Stack getItem(int index) {
+		return this.stack.get(index);
 	}
 }
