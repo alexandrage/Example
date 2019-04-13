@@ -29,6 +29,7 @@ public class Configs {
 			add(name);
 		try {
 			this.sfg.get(name).save();
+			this.sfg.remove(name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
