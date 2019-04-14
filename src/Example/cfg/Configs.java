@@ -8,6 +8,10 @@ import org.bukkit.plugin.Plugin;
 public class Configs {
 	private Map<String, CustomConfig> sfg = new HashMap<String, CustomConfig>();
 	private Plugin plugin;
+	
+	public Configs(Plugin plugin) {
+		this.plugin = plugin;
+	}
 
 	public CustomConfig get(String name, Plugin plugin) {
 		if (this.sfg.get(name) == null)
