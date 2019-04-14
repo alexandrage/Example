@@ -1,14 +1,14 @@
 package Example.cfg;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.plugin.Plugin;
 
 public class Configs {
-	private Map<String, CustomConfig> sfg = new HashMap<String, CustomConfig>();
+	private Map<String, CustomConfig> sfg = new ConcurrentHashMap<String, CustomConfig>();
 	private Plugin plugin;
-	
+
 	public Configs(Plugin plugin) {
 		this.plugin = plugin;
 	}
