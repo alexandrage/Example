@@ -13,7 +13,7 @@ public class Configs {
 		this.plugin = plugin;
 	}
 
-	public CustomConfig get(String name, Plugin plugin) {
+	public CustomConfig get(String name) {
 		if (this.sfg.get(name) == null)
 			add(name);
 		return this.sfg.get(name);
