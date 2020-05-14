@@ -23,9 +23,10 @@ public class Configs {
 		return this.sfg;
 	}
 
-	public void add(String name) {
+	public CustomConfig add(String name) {
 		CustomConfig custom = new CustomConfig(name, this.plugin);
 		this.sfg.put(name, custom);
+		return this.sfg.get(name);
 	}
 
 	public void save(String name) {
