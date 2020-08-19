@@ -18,11 +18,13 @@ public class Cuboid implements Iterable<Block> {
 	private String world;
 
 	public Cuboid(Location loc1, Location loc2) {
+		this.world = loc1.getWorld().getName();
 		normalize(loc1.getBlockX(), loc1.getBlockY(), loc1.getBlockZ(), loc2.getBlockX(), loc2.getBlockY(),
 				loc2.getBlockZ());
 	}
 
-	public Cuboid(int x1, int y1, int z1, int x2, int y2, int z2) {
+	public Cuboid(String world, int x1, int y1, int z1, int x2, int y2, int z2) {
+		this.world = world;
 		normalize(x1, y1, z1, x2, y2, z2);
 	}
 
