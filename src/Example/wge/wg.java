@@ -1,16 +1,14 @@
 package Example.wge;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
 import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
@@ -70,8 +68,8 @@ public class wg {
             return (ProtectedRegion)new ProtectedPolygonalRegion(id, polySel.getPoints(), minY, maxY);
         }
         if (selection instanceof CuboidRegion) {
-            final BlockVector min = selection.getMinimumPoint().toBlockVector();
-            final BlockVector max = selection.getMaximumPoint().toBlockVector();
+            final BlockVector3 min = selection.getMinimumPoint();
+            final BlockVector3 max = selection.getMaximumPoint();
             return (ProtectedRegion)new ProtectedCuboidRegion(id, min, max);
         }
         throw new CommandException("К сожалению, вы можете использовать только кубоиды и полигоны для регионов WorldGuard.");

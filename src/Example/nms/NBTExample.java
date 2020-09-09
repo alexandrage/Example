@@ -14,39 +14,32 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftInventoryView;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
+import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R2.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import net.minecraft.server.v1_13_R2.BlockPosition;
-import net.minecraft.server.v1_13_R2.ContainerWorkbench;
-import net.minecraft.server.v1_13_R2.Item;
-import net.minecraft.server.v1_13_R2.ItemCooldown;
-import net.minecraft.server.v1_13_R2.MojangsonParser;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.SoundCategory;
-import net.minecraft.server.v1_13_R2.SoundEffect;
-import net.minecraft.server.v1_13_R2.SoundEffectType;
-import net.minecraft.server.v1_13_R2.TileEntity;
+import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R2.ContainerWorkbench;
+import net.minecraft.server.v1_16_R2.MojangsonParser;
+import net.minecraft.server.v1_16_R2.NBTTagCompound;
+import net.minecraft.server.v1_16_R2.SoundCategory;
+import net.minecraft.server.v1_16_R2.SoundEffect;
+import net.minecraft.server.v1_16_R2.SoundEffectType;
+import net.minecraft.server.v1_16_R2.TileEntity;
 
 public class NBTExample {
 
@@ -65,7 +58,7 @@ public class NBTExample {
 		NBTTagCompound nbt = new NBTTagCompound();
 		CraftItemStack.asNMSCopy(item).save(nbt);
 		nbt.set("tag", tag);
-		return CraftItemStack.asBukkitCopy(net.minecraft.server.v1_13_R2.ItemStack.a(nbt));
+		return CraftItemStack.asBukkitCopy(net.minecraft.server.v1_16_R2.ItemStack.a(nbt));
 	}
 
 	public static void setSkullSkin(Block block, Location loc, String name) {
@@ -76,7 +69,7 @@ public class NBTExample {
 			NBTTagCompound NBT = new NBTTagCompound();
 			tile.save(NBT);
 			NBT = MojangsonParser.parse(nbt(getSkinProfile(uuid), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-			tile.load(NBT);
+			tile.load(null, NBT);
 			block.getState().update();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -193,29 +186,17 @@ public class NBTExample {
 			Location loc = block.getLocation();
 			Method method = CraftBlock.class.getDeclaredMethod("getNMSBlock");
 			method.setAccessible(true);
-			net.minecraft.server.v1_13_R2.Block b = (net.minecraft.server.v1_13_R2.Block) method.invoke(block);
-			SoundEffectType soundeffecttype = b.getStepSound();
+			net.minecraft.server.v1_16_R2.Block b = (net.minecraft.server.v1_16_R2.Block) method.invoke(block);
+			SoundEffectType soundeffecttype = b.getStepSound(b.getStates().getBlockData());
 			CraftWorld w = (CraftWorld) loc.getWorld();
-			net.minecraft.server.v1_13_R2.World world = w.getHandle();
+			net.minecraft.server.v1_16_R2.World world = w.getHandle();
 			Field field = SoundEffectType.class.getDeclaredField("o");
 			field.setAccessible(true);
 			SoundEffect se = (SoundEffect) field.get(soundeffecttype);
-			world.a(null, loc.getX(), loc.getY(), loc.getZ(), se, SoundCategory.NEUTRAL, soundeffecttype.a(), 0.8f);
+			world.playSound(null, loc.getX(), loc.getY(), loc.getZ(), se, SoundCategory.NEUTRAL, soundeffecttype.a(), 0.8f);
 			block.setType(Material.AIR);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-	}
-	
-	public boolean isCooldown(Player player, ItemStack stack, int time) {
-		net.minecraft.server.v1_13_R2.ItemStack cstack = CraftItemStack.asNMSCopy(stack);
-		Item item = cstack.getItem();
-		CraftPlayer cp = (CraftPlayer) player;
-		ItemCooldown itemCooldown = cp.getHandle().getCooldownTracker();
-		boolean bool = itemCooldown.a(item);
-		if (!bool) {
-			itemCooldown.a(item, time);
-		}
-		return bool;
 	}
 }
