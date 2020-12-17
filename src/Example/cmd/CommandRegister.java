@@ -1,7 +1,8 @@
-package Example.cmd;
+package menu.cmd;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
 import org.bukkit.Bukkit;
@@ -66,6 +67,18 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void syncCommands() {
+		String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+		try {
+			Class<?> server = Class.forName("org.bukkit.craftbukkit." + version + ".CraftServer");
+			Method syncCommands = server.getDeclaredMethod("syncCommands");
+			syncCommands.setAccessible(true);
+			syncCommands.invoke(Bukkit.getServer());
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 }
