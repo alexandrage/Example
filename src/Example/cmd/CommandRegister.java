@@ -45,6 +45,7 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		syncCommands();
 	}
 
 	public static void unregister(String name) {
@@ -65,12 +66,13 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 				command.remove(aliases);
 				command.remove(desc.getName().toLowerCase() + ":" + aliases);
 			}
+			syncCommands();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void syncCommands() {
+	public static void syncCommands() {
 		String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
 		try {
 			Class<?> server = Class.forName("org.bukkit.craftbukkit." + version + ".CraftServer");
