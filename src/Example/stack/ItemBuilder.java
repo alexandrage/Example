@@ -14,7 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemBuilder {
-	ItemStack stack;
+	private ItemStack stack;
+
+	public static ItemBuilder inst(Material m) {
+		return new ItemBuilder(m);
+	}
 
 	public ItemBuilder(Material m) {
 		this.stack = new ItemStack(m);
@@ -33,14 +37,14 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder setLore(String... name) {
-		ItemMeta meta = stack.getItemMeta();
+		ItemMeta meta = this.stack.getItemMeta();
 		meta.setLore(Arrays.asList(name));
 		this.stack.setItemMeta(meta);
 		return this;
 	}
 
 	public ItemBuilder setEnchantment(String... name) {
-		ItemMeta meta = stack.getItemMeta();
+		ItemMeta meta = this.stack.getItemMeta();
 		for (String e : name) {
 			EnchantmentWrapper ench = new EnchantmentWrapper(e.split(":")[0]);
 			meta.addEnchant(ench, Integer.parseInt(e.split(":")[1]), true);
@@ -50,14 +54,21 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder setUnbreakable() {
-		ItemMeta meta = stack.getItemMeta();
+		ItemMeta meta = this.stack.getItemMeta();
 		meta.setUnbreakable(true);
 		this.stack.setItemMeta(meta);
 		return this;
 	}
 
+	public ItemBuilder setCustomModelData(int value) {
+		ItemMeta meta = this.stack.getItemMeta();
+		meta.setCustomModelData(value);
+		this.stack.setItemMeta(meta);
+		return this;
+	}
+
 	public ItemBuilder setAttribute(String... name) {
-		ItemMeta meta = stack.getItemMeta();
+		ItemMeta meta = this.stack.getItemMeta();
 		for (String a : name) {
 			Attribute am = Attribute.valueOf(a.split(":")[0]);
 			double d = Double.parseDouble(a.split(":")[1]);
@@ -74,7 +85,7 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder hideAttributes() {
-		ItemMeta meta = stack.getItemMeta();
+		ItemMeta meta = this.stack.getItemMeta();
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		this.stack.setItemMeta(meta);
 		return this;
