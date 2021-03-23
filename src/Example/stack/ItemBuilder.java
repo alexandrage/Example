@@ -1,14 +1,7 @@
 package Example.stack;
 
-import java.util.Arrays;
-import java.util.UUID;
-
+import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.attribute.AttributeModifier.Operation;
-import org.bukkit.enchantments.EnchantmentWrapper;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,18 +29,20 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder setLore(String... name) {
+	public ItemBuilder addLore(String... value) {
 		ItemMeta meta = this.stack.getItemMeta();
-		meta.setLore(Arrays.asList(name));
+		List<String> lore = meta.getLore();
+		for (String l : value) {
+			lore.add(l);
+		}
 		this.stack.setItemMeta(meta);
 		return this;
 	}
 
-	public ItemBuilder setEnchantment(String... name) {
+	public ItemBuilder addEnchantment(EnchAdder... value) {
 		ItemMeta meta = this.stack.getItemMeta();
-		for (String e : name) {
-			EnchantmentWrapper ench = new EnchantmentWrapper(e.split(":")[0]);
-			meta.addEnchant(ench, Integer.parseInt(e.split(":")[1]), true);
+		for (EnchAdder ench : value) {
+			meta.addEnchant(ench.getEnchantment(), ench.getLevel(), true);
 		}
 		this.stack.setItemMeta(meta);
 		return this;
@@ -67,18 +62,10 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder setAttribute(String... name) {
+	public ItemBuilder addAttribute(AttrAdder... attributes) {
 		ItemMeta meta = this.stack.getItemMeta();
-		for (String a : name) {
-			Attribute am = Attribute.valueOf(a.split(":")[0]);
-			double d = Double.parseDouble(a.split(":")[1]);
-			if (a.split(":").length == 3) {
-				EquipmentSlot s = EquipmentSlot.valueOf(a.split(":")[2]);
-				meta.addAttributeModifier(am,
-						new AttributeModifier(UUID.randomUUID(), am.name(), d, Operation.ADD_NUMBER, s));
-			} else {
-				meta.addAttributeModifier(am, new AttributeModifier(am.name(), d, Operation.ADD_NUMBER));
-			}
+		for (AttrAdder attribute : attributes) {
+			meta.addAttributeModifier(attribute.getAttribute(), attribute.getAttributeModifier());
 		}
 		this.stack.setItemMeta(meta);
 		return this;
