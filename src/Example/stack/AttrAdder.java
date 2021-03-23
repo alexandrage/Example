@@ -11,6 +11,10 @@ public class AttrAdder {
 	private AttributeModifier modifier;
 	private Attribute attribute;
 
+	public static AttrAdder inst(Attribute attribute, String name, double amount, Operation operation) {
+		return new AttrAdder(attribute, name, amount, operation);
+	}
+
 	public AttrAdder(Attribute attribute, String name, double amount, Operation operation) {
 		this.attribute = attribute;
 		this.modifier = new AttributeModifier(name, amount, operation);
