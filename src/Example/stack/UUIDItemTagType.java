@@ -2,11 +2,10 @@ package Example.stack;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataType;
 
-import org.bukkit.inventory.meta.tags.ItemTagAdapterContext;
-import org.bukkit.inventory.meta.tags.ItemTagType;
-
-public class UUIDItemTagType implements ItemTagType<byte[], UUID> {
+public class UUIDItemTagType implements PersistentDataType<byte[], UUID> {
 	@Override
 	public Class<byte[]> getPrimitiveType() {
 		return byte[].class;
@@ -18,7 +17,7 @@ public class UUIDItemTagType implements ItemTagType<byte[], UUID> {
 	}
 
 	@Override
-	public byte[] toPrimitive(UUID uuid, ItemTagAdapterContext itemTagAdapterContext) {
+	public byte[] toPrimitive(UUID uuid, PersistentDataAdapterContext value) {
 		ByteBuffer buffer = ByteBuffer.allocate(16);
 		buffer.putLong(uuid.getLeastSignificantBits());
 		buffer.putLong(uuid.getMostSignificantBits());
@@ -26,7 +25,7 @@ public class UUIDItemTagType implements ItemTagType<byte[], UUID> {
 	}
 
 	@Override
-	public UUID fromPrimitive(byte[] bytes, ItemTagAdapterContext itemTagAdapterContext) {
+	public UUID fromPrimitive(byte[] bytes, PersistentDataAdapterContext value) {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		long leastBits = buffer.getLong();
 		long mostBits = buffer.getLong();
