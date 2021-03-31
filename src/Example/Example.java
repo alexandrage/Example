@@ -1,5 +1,8 @@
 package Example;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -106,5 +109,39 @@ public class Example {
 		}
 	}
 	
-	// Bukkit.createBlockData("minecraft:dirt")
+	public static void randomTP(World world, Player player, int radius) {
+        Random rd = new Random();
+        int x = rd.nextInt(radius + 1) - radius / 2;
+        int z = rd.nextInt(radius + 1) - radius / 2;
+        int y = world.getHighestBlockYAt(x, z);
+        player.teleport(new Location(world, x, y + 1, z));
+    }
+	
+	public static Map<Integer, String> in = new HashMap<Integer, String>();
+	static {
+		in.put(-90, "→");
+		in.put(-45, "↗");
+		in.put(0, "↑");
+		in.put(45, "↖");
+		in.put(90, "←");
+		in.put(135, "↙");
+		in.put(180, "↓");
+		in.put(225, "↘");
+		in.put(270, "→");
+	}
+
+	public String nearest(Location targetLocation, Location location) {
+		targetLocation.setDirection(targetLocation.toVector().subtract(location.toVector()));
+		int value = (int) (location.getYaw() - targetLocation.getYaw());
+		int min = Integer.MAX_VALUE;
+		int closest = value;
+		for (int v : in.keySet()) {
+			int diff = Math.abs(v - value);
+			if (diff < min) {
+				min = diff;
+				closest = v;
+			}
+		}
+		return in.get(closest) + " " + (int) location.distance(targetLocation) + "m";
+	}
 }
