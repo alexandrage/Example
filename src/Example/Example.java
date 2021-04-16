@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -23,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import Example.similar.Similar;
 
 public class Example {
@@ -108,17 +104,23 @@ public class Example {
 			is.setItemMeta(bmeta);
 		}
 	}
-	
+
 	public static void randomTP(World world, Player player, int radius) {
-        Random rd = new Random();
-        int x = rd.nextInt(radius + 1) - radius / 2;
-        int z = rd.nextInt(radius + 1) - radius / 2;
-        int y = world.getHighestBlockYAt(x, z);
-        player.teleport(new Location(world, x, y + 1, z));
-    }
-	
-	public static Map<Integer, String> in = new HashMap<Integer, String>();
+		Random rd = new Random();
+		int x = rd.nextInt(radius + 1) - radius / 2;
+		int z = rd.nextInt(radius + 1) - radius / 2;
+		int y = world.getHighestBlockYAt(x, z);
+		player.teleport(new Location(world, x, y + 1, z));
+	}
+
+	private static Map<Integer, String> in = new HashMap<Integer, String>();
 	static {
+		in.put(-360, "↑");
+		in.put(-315, "↖");
+		in.put(-270, "←");
+		in.put(-225, "↙");
+		in.put(-180, "↓");
+		in.put(-135, "↘");
 		in.put(-90, "→");
 		in.put(-45, "↗");
 		in.put(0, "↑");
@@ -128,11 +130,13 @@ public class Example {
 		in.put(180, "↓");
 		in.put(225, "↘");
 		in.put(270, "→");
+		in.put(315, "↗");
+		in.put(360, "↑");
 	}
 
 	public String nearest(Location targetLocation, Location location) {
 		targetLocation.setDirection(targetLocation.toVector().subtract(location.toVector()));
-		int value = (int) (location.getYaw() - targetLocation.getYaw());
+		int value = (int) (location.getYaw() - targetLocation.getYaw()));
 		int min = Integer.MAX_VALUE;
 		int closest = value;
 		for (int v : in.keySet()) {
