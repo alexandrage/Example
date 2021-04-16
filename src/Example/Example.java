@@ -136,7 +136,7 @@ public class Example {
 
 	public String nearest(Location targetLocation, Location location) {
 		targetLocation.setDirection(targetLocation.toVector().subtract(location.toVector()));
-		int value = (int) (location.getYaw() - targetLocation.getYaw()));
+		int value = (int) (location.getYaw() - targetLocation.getYaw());
 		int min = Integer.MAX_VALUE;
 		int closest = value;
 		for (int v : in.keySet()) {
