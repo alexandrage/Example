@@ -2,7 +2,6 @@ package Example.cfg;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,7 +39,6 @@ public class CustomConfig {
 	}
 
 	public static boolean exist(String name, Plugin plugin) {
-		File file = new File(plugin.getDataFolder(), name + ".yml");
-		return file.exists();
+		return new File(plugin.getDataFolder(), name + ".yml").exists();
 	}
 }
