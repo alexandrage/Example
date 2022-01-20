@@ -2,11 +2,10 @@ package Example.cfg;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.plugin.Plugin;
 
 public class Configs {
-	private Map<String, CustomConfig> sfg = new ConcurrentHashMap<String, CustomConfig>();
+	private Map<String, CustomConfig> cfg = new ConcurrentHashMap<String, CustomConfig>();
 	private Plugin plugin;
 
 	public Configs(Plugin plugin) {
@@ -14,34 +13,32 @@ public class Configs {
 	}
 
 	public CustomConfig get(String name) {
-		if (this.sfg.get(name) == null)
+		if (this.cfg.containsKey(name)) {
 			add(name);
-		return this.sfg.get(name);
+		}
+		return this.cfg.get(name);
 	}
 
 	public Map<String, CustomConfig> getConfigs() {
-		return this.sfg;
+		return this.cfg;
 	}
 
 	public CustomConfig add(String name) {
 		CustomConfig custom = new CustomConfig(name, this.plugin);
-		this.sfg.put(name, custom);
-		return this.sfg.get(name);
+		this.cfg.put(name, custom);
+		return this.cfg.get(name);
 	}
 
 	public void save(String name) {
-		if (this.sfg.get(name) == null)
+		if (this.cfg.containsKey(name)) {
 			add(name);
-		try {
-			this.sfg.get(name).save();
-			this.sfg.remove(name);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		this.cfg.get(name).save();
+		this.cfg.remove(name);
 	}
 
 	public void saveAll() {
-		for (String name : this.sfg.keySet()) {
+		for (String name : this.cfg.keySet()) {
 			save(name);
 		}
 	}
