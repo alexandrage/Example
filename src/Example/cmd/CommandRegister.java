@@ -30,11 +30,14 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 
 	@Override
 	public boolean execute(CommandSender sender, String label, String[] args) {
-		boolean b = this.owner.onCommand(sender, this, label, args);
-		if (!b) {
+		if (!this.testPermission(sender)) {
+			return true;
+		}
+
+		if (!this.owner.onCommand(sender, this, label, args)) {
 			sender.sendMessage(this.usageMessage);
 		}
-		return b;
+		return false;
 	}
 
 	public static void register(Plugin plugin, CommandExecutor executor, String[] aliases, String desc, String usage) {
