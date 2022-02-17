@@ -34,10 +34,12 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 			return true;
 		}
 
-		if (!this.owner.onCommand(sender, this, label, args)) {
+		if (this.owner.onCommand(sender, this, label, args)) {
+			return true;
+		} else {
 			sender.sendMessage(this.usageMessage);
+			return false;
 		}
-		return false;
 	}
 
 	public static void register(Plugin plugin, CommandExecutor executor, String[] aliases, String desc, String usage) {
