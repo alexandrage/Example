@@ -14,10 +14,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 public class CommandRegister extends Command implements PluginIdentifiableCommand {
-	protected Plugin plugin;
-	protected final CommandExecutor owner;
+	private Plugin plugin;
+	private final CommandExecutor owner;
 
-	public CommandRegister(String[] aliases, String desc, String usage, CommandExecutor owner, Plugin plugin) {
+	private CommandRegister(String[] aliases, String desc, String usage, CommandExecutor owner, Plugin plugin) {
 		super(aliases[0], desc, usage, Arrays.asList(aliases));
 		this.owner = owner;
 		this.plugin = plugin;
@@ -67,7 +67,7 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 		}
 	}
 
-	public static void syncCommands() {
+	private static void syncCommands() {
 		String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
 		try {
 			Class<?> server = Class.forName("org.bukkit.craftbukkit." + version + ".CraftServer");
